@@ -1,0 +1,706 @@
+---
+title: Function Methods
+icon: ⚙️
+---
+
+# Function Methods
+
+Lodash 提供了一系列用于处理函数的工具方法，帮助开发者更灵活地控制函数执行、绑定上下文、实现函数组合与柯里化等常见场景。以下是 `Function` 分类下核心方法的详细说明与使用示例。
+
+## after
+
+<Heading level="2">
+    after
+</Heading>
+
+创建一个函数，当被调用 `n` 次或更多次时才执行 `func`，是 `_.before` 的反向方法。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `n` *(number)*: 触发 `func` 执行需要的调用次数
+                2. `func` *(Function)*: 需要被限制的函数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的受限函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+var saves = ['profile', 'settings'];
+
+var done = _.after(saves.length, function() {
+  console.log('done saving!');
+});
+
+_.forEach(saves, function(type) {
+  asyncSave({ 'type': type, 'complete': done });
+});
+// => Logs 'done saving!' after the two async saves have completed.
+```
+
+## before
+
+<Heading level="2">
+    before
+</Heading>
+
+创建一个函数，当被调用次数小于 `n` 时正常执行 `func`，超过 `n` 次后调用将返回最后一次 `func` 的执行结果。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            3.0.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `n` *(number)*: `func` 停止被调用的阈值次数
+                2. `func` *(Function)*: 需要被限制的函数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的受限函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+jQuery(element).on('click', _.before(5, addContactToList));
+// => Allows adding up to 4 contacts to the list.
+```
+
+## bind
+
+<Heading level="2">
+    bind
+</Heading>
+
+创建一个函数，将 `func` 的 `this` 绑定到 `thisArg`，并预先填充 `partials` 作为部分参数。可以使用 `_.bind.placeholder` 作为占位符。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要绑定的函数
+                2. `thisArg` *(&#42;)*: `func` 的 `this` 绑定值
+                3. `[partials]` *(...&#42;)*: 预先填充的参数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的绑定函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+function greet(greeting, punctuation) {
+  return greeting + ' ' + this.user + punctuation;
+}
+
+var object = { 'user': 'fred' };
+
+var bound = _.bind(greet, object, 'hi');
+bound('!');
+// => 'hi fred!'
+
+// Bound with placeholders.
+var bound = _.bind(greet, object, _, '!');
+bound('hi');
+// => 'hi fred!'
+```
+
+## curry
+
+<Heading level="2">
+    curry
+</Heading>
+
+创建一个柯里化函数，接受 `func` 的参数，当提供的参数数量达到 `arity` 时执行 `func` 并返回结果，否则返回接受剩余参数的新函数。可以使用 `_.curry.placeholder` 作为占位符。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            2.0.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要柯里化的函数
+                2. `[arity=func.length]` *(number)*: 函数的元数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的柯里化函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+var abc = function(a, b, c) {
+  return [a, b, c];
+};
+
+var curried = _.curry(abc);
+
+curried(1)(2)(3);
+// => [1, 2, 3]
+
+curried(1, 2)(3);
+// => [1, 2, 3]
+
+curried(1, 2, 3);
+// => [1, 2, 3]
+
+// Curried with placeholders.
+curried(1)(_, 3)(2);
+// => [1, 2, 3]
+```
+
+## debounce
+
+<Heading level="2">
+    debounce
+</Heading>
+
+创建一个防抖函数，延迟 `wait` 毫秒后执行 `func`，如果在等待期间再次调用防抖函数，则重新计时。防抖函数提供 `cancel` 方法取消延迟调用，`flush` 方法立即执行。可以通过 `options` 配置前置/后置触发。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要防抖的函数
+                2. `[wait=0]` *(number)*: 延迟毫秒数
+                3. `[options={}]` *(Object)*: 配置项
+                4. `[options.leading=false]` *(boolean)*: 是否在延迟开始前触发
+                5. `[options.maxWait]` *(number)*: 允许延迟的最大时间
+                6. `[options.trailing=true]` *(boolean)*: 是否在延迟结束后触发
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的防抖函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+// Avoid costly calculations while the window size is in flux.
+jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+
+// Invoke `sendMail` when clicked, debouncing subsequent calls.
+jQuery(element).on('click', _.debounce(sendMail, 300, {
+  'leading': true,
+  'trailing': false
+}));
+
+// Ensure `batchLog` is invoked once after 1 second of debounced calls.
+var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+var source = new EventSource('/stream');
+jQuery(source).on('message', debounced);
+
+// Cancel the trailing debounced invocation.
+jQuery(window).on('popstate', debounced.cancel);
+```
+
+## defer
+
+<Heading level="2">
+    defer
+</Heading>
+
+延迟调用 `func` 直到当前调用栈清空，额外的参数会在调用时传给 `func`。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要延迟执行的函数
+                2. `[args]` *(...&#42;)*: 传给 `func` 的参数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(number)*: 返回定时器 id
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+_.defer(function(text) {
+  console.log(text);
+}, 'deferred');
+// => Logs 'deferred' after one millisecond.
+```
+
+## delay
+
+<Heading level="2">
+    delay
+</Heading>
+
+延迟 `wait` 毫秒后调用 `func`，额外的参数会在调用时传给 `func`。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要延迟的函数
+                2. `wait` *(number)*: 延迟的毫秒数
+                3. `[args]` *(...&#42;)*: 传给 `func` 的参数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(number)*: 返回定时器 id
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+_.delay(function(text) {
+  console.log(text);
+}, 1000, 'later');
+// => Logs 'later' after one second.
+```
+
+## memoize
+
+<Heading level="2">
+    memoize
+</Heading>
+
+创建一个记忆化函数，缓存 `func` 的执行结果。可以通过 `resolver` 自定义缓存 key，默认使用第一个参数作为 key。缓存可以通过函数的 `cache` 属性访问和修改。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要记忆化的函数
+                2. `[resolver]` *(Function)*: 用于解析缓存 key 的函数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的记忆化函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+var object = { 'a': 1, 'b': 2 };
+var other = { 'c': 3, 'd': 4 };
+
+var values = _.memoize(_.values);
+values(object);
+// => [1, 2]
+
+values(other);
+// => [3, 4]
+
+object.a = 2;
+values(object);
+// => [1, 2]
+
+// Modify the result cache.
+values.cache.set(object, ['a', 'b']);
+values(object);
+// => ['a', 'b']
+
+// Replace `_.memoize.Cache`.
+_.memoize.Cache = WeakMap;
+```
+
+## negate
+
+<Heading level="2">
+    negate
+</Heading>
+
+创建一个函数，对 `predicate` 的执行结果取反。创建的函数的 `this` 绑定和参数会传递给 `predicate`。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            3.0.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `predicate` *(Function)*: 需要取反的断言函数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的取反函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+function isEven(n) {
+  return n % 2 == 0;
+}
+
+_.filter([1, 2, 3, 4, 5, 6], _.negate(isEven));
+// => [1, 3, 5]
+```
+
+## once
+
+<Heading level="2">
+    once
+</Heading>
+
+创建一个函数，限制 `func` 只能被调用一次，后续调用都会返回第一次调用的结果。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要限制的函数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的受限函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+var initialize = _.once(createApplication);
+initialize();
+initialize();
+// => `createApplication` is invoked once
+```
+
+## partial
+
+<Heading level="2">
+    partial
+</Heading>
+
+创建一个函数，预先填充 `partials` 作为 `func` 的前置参数，不会修改 `this` 绑定。可以使用 `_.partial.placeholder` 作为占位符。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.2.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要部分应用参数的函数
+                2. `[partials]` *(...&#42;)*: 预先填充的参数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的部分应用函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+function greet(greeting, name) {
+  return greeting + ' ' + name;
+}
+
+var sayHelloTo = _.partial(greet, 'hello');
+sayHelloTo('fred');
+// => 'hello fred'
+
+// Partially applied with placeholders.
+var greetFred = _.partial(greet, _, 'fred');
+greetFred('hi');
+// => 'hi fred'
+```
+
+## throttle
+
+<Heading level="2">
+    throttle
+</Heading>
+
+创建一个节流函数，在 `wait` 毫秒内最多执行一次 `func`。节流函数提供 `cancel` 方法取消延迟调用，`flush` 方法立即执行。可以通过 `options` 配置前置/后置触发。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `func` *(Function)*: 需要节流的函数
+                2. `[wait=0]` *(number)*: 节流的间隔毫秒数
+                3. `[options={}]` *(Object)*: 配置项
+                4. `[options.leading=true]` *(boolean)*: 是否在间隔开始时触发
+                5. `[options.trailing=true]` *(boolean)*: 是否在间隔结束时触发
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的节流函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+// Avoid excessively updating the position while scrolling.
+jQuery(window).on('scroll', _.throttle(updatePosition, 100));
+
+// Invoke `renewToken` when the click event is fired, but not more than once every 5 minutes.
+var throttled = _.throttle(renewToken, 300000, { 'trailing': false });
+jQuery(element).on('click', throttled);
+
+// Cancel the trailing throttled invocation.
+jQuery(window).on('popstate', throttled.cancel);
+```
+
+## wrap
+
+<Heading level="2">
+    wrap
+</Heading>
+
+创建一个函数，将 `value` 作为第一个参数传给 `wrapper`，调用该函数时的额外参数会追加到 `wrapper` 的参数列表后面。`wrapper` 的 `this` 绑定是创建函数的 `this`。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Since
+        </TableCell>
+        <TableCell>
+            0.1.0
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Arguments
+        </TableCell>
+        <TableCell>
+            <BulletedList>
+                1. `value` *(&#42;)*: 需要包装的值
+                2. `[wrapper=identity]` *(Function)*: 包装函数
+            </BulletedList>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Returns
+        </TableCell>
+        <TableCell>
+            *(Function)*: 返回新的函数
+        </TableCell>
+    </TableRow>
+</Table>
+
+示例：
+
+```js
+var p = _.wrap(_.escape, function(func, text) {
+  return '<p>' + func(text) + '</p>';
+});
+
+p('fred, barney, & pebbles');
+// => '<p>fred, barney, &amp; pebbles</p>'
+```
+
+## 相关参考
+
+<Paragraph>
+    更多函数相关方法可参考 <Link href="/api-reference/array">Array Methods</Link>、<Link href="/api-reference/object">Object Methods</Link>、<Link href="/concepts/fp">函数式编程概念</Link>，或返回 <Link href="/index">首页</Link> 查看完整文档导航。
+</Paragraph>
