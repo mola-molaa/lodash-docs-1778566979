@@ -1,0 +1,340 @@
+---
+title: FP Guide
+icon: ⚙️
+---
+
+# lodash/fp 模块概述
+
+<Mark bold>lodash/fp</Mark> 是 Lodash 面向函数式编程场景提供的独立构建版本，核心目标是让 Lodash 方法更符合函数式编程的惯例，降低函数组合、柯里化调用的使用成本。
+
+你可以通过以下方式引入 lodash/fp：
+```js
+// 引入完整 fp 构建
+var fp = require('lodash/fp');
+
+// 按需引入单个 fp 方法
+var curryN = require('lodash/fp/curryN');
+```
+
+如果需要了解 Lodash 的整体架构设计，可以参考 <Link href="/concepts/architecture">架构概览</Link> 页面，各具体 API 的用法可查阅对应分类的参考文档，例如 <Link href="/api-reference/function">函数类 API</Link>、<Link href="/api-reference/array">数组类 API</Link> 等。
+
+---
+
+# 核心特性
+
+## 不可变操作
+
+标准 Lodash 中部分方法会直接修改原数据（例如 `assign`、`merge`、`pull`、`fill` 等），而 lodash/fp 会对这类方法做封装，在执行操作前自动克隆输入数据，确保原数据不会被修改，符合函数式编程的无副作用原则。
+
+源码中通过 `mapping.mutate` 维护会修改数据的函数列表，分为三类：
+- `mutate.array`：修改原数组的方法，如 `fill`、`pull`、`remove`、`reverse`
+- `mutate.object`：修改原对象的方法，如 `assign`、`assignIn`、`defaults`、`merge`
+- `mutate.set`：修改对象指定路径的方法，如 `set`、`unset`、`update`
+
+转换时会对这些方法使用 `wrapImmutable` 封装，先克隆输入数据再执行原方法，最终返回修改后的克隆对象，原数据保持不变。
+
+## 自动柯里化
+
+lodash/fp 中几乎所有接受多参数的方法都会被自动柯里化，你可以逐步传入参数，直到参数数量满足要求后执行函数，非常适合函数组合场景。
+
+柯里化的规则如下：
+- 默认对所有参数数量大于 1 的方法启用柯里化
+- 可以通过 `options.curry` 控制是否开启柯里化，显式传入 `curry: false` 可关闭
+- 柯里化后的函数参数数量由方法本身的元数（arity）决定，元数信息来自 `mapping.aryMethod` 的配置
+
+例如标准 Lodash 的 `_.get(object, path, defaultValue)` 需要三个参数，在 fp 模式下柯里化后可以先传 `path` 和 `defaultValue`，得到一个接收 `object` 的函数：
+```js
+import { get } from 'lodash/fp';
+
+// 柯里化调用：先传入 path 和 defaultValue，返回一个接收 object 的函数
+const getUsername = get('username', 'defaultUser');
+const user = { username: 'test' };
+console.log(getUsername(user)); // 输出 'test'
+```
+
+## 参数顺序调整
+
+这是 lodash/fp 和标准 Lodash 最核心的差异之一：标准 Lodash 采用 <Mark bold>数据优先、迭代器/配置其次</Mark> 的参数顺序，而 lodash/fp 调整为 <Mark bold>迭代器/配置优先、数据最后</Mark> 的 `iteratee-first data-last` 顺序，更符合函数组合时数据流动的逻辑。
+
+参数重排的规则由 `mapping` 中的多个配置共同决定：
+- `mapping.aryRearg`：按方法元数（1/2/3/4 元）定义默认重排规则，例如 2 元方法重排为 `[1, 0]`（交换前两个参数），3 元方法重排为 `[2, 0, 1]`
+- `mapping.methodRearg`：为特定方法定义自定义重排规则，例如 `getOr` 的重排规则为 `[2, 1, 0]`，将默认的第三个参数（数据）放到第一位，前两个配置参数后移
+- `mapping.skipRearg`：标记不需要重排的方法，例如 `add`、`multiply`、`range` 等本身就符合 fp 场景参数顺序的方法会跳过该步骤
+
+例如标准 Lodash 的 `_.map(collection, iteratee)` 是先传集合再传迭代函数，在 fp 模式下重排后变为 `fp.map(iteratee, collection)`，更适合组合：
+```js
+import { map, filter, flow } from 'lodash/fp';
+
+const processData = flow(
+  filter(item => item.active), // 先传入筛选条件，等待集合参数
+  map(item => item.value)      // 先传入映射函数，等待集合参数
+);
+
+const data = [
+  { active: true, value: 1 },
+  { active: false, value: 2 },
+  { active: true, value: 3 }
+];
+console.log(processData(data)); // 输出 [1, 3]
+```
+
+## 固定元数
+
+lodash/fp 会限制方法的参数数量，避免多余参数传入导致意外行为，同时支持展开参数场景：
+- 通过 `mapping.aryMethod` 定义每个方法的固定元数，使用 `baseAry` 封装限制参数数量
+- 对于需要展开参数的方法（如 `assignAll`、`partial`、`without`），通过 `mapping.methodSpread` 配置展开起始位置，使用 `flatSpread` 处理参数展开逻辑
+- 可以通过 `options.fixed` 控制是否开启固定元数，显式传入 `fixed: false` 可关闭
+- `mapping.skipFixed` 中的方法（如 `flow`、`flowRight`、`iteratee`）会跳过固定元数处理
+
+## 迭代器参数限制
+
+对于接收迭代器作为参数的方法（如 `map`、`filter`、`reduce`），lodash/fp 会限制迭代器本身的参数数量，避免迭代器接收到多余参数：
+- 通过 `mapping.iterateeAry` 定义迭代器的元数，例如 `map`、`filter` 的迭代器元数为 1，`reduce`、`transform` 的迭代器元数为 2
+- 通过 `mapping.iterateeRearg` 调整迭代器的参数顺序，例如 `mapKeys` 的迭代器参数重排为 `[1]`
+- 可以通过 `options.cap` 控制是否开启迭代器参数限制，显式传入 `cap: false` 可关闭
+
+---
+
+# 与标准 Lodash 的差异对比
+
+下表列出核心差异点：
+
+<Table>
+    <TableRow>
+        <TableCell>
+            特性
+        </TableCell>
+        <TableCell>
+            标准 Lodash
+        </TableCell>
+        <TableCell>
+            lodash/fp
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            数据可变性
+        </TableCell>
+        <TableCell>
+            部分方法直接修改原数据
+        </TableCell>
+        <TableCell>
+            自动克隆输入，不修改原数据
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            柯里化
+        </TableCell>
+        <TableCell>
+            默认不柯里化，需手动调用 `_.curry`
+        </TableCell>
+        <TableCell>
+            自动柯里化多参数方法
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            参数顺序
+        </TableCell>
+        <TableCell>
+            数据优先，迭代器/配置其次
+        </TableCell>
+        <TableCell>
+            迭代器/配置优先，数据最后
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            元数控制
+        </TableCell>
+        <TableCell>
+            方法支持任意数量参数
+        </TableCell>
+        <TableCell>
+            固定方法元数，限制多余参数
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            别名支持
+        </TableCell>
+        <TableCell>
+            支持部分别名
+        </TableCell>
+        <TableCell>
+            额外支持 Ramda 风格别名，如 `pipe` 对应 `flow`、`prop` 对应 `get`
+        </TableCell>
+    </TableRow>
+</Table>
+
+---
+
+# 别名与映射规则
+
+lodash/fp 提供了两类别名，方便用户从其他函数式库迁移：
+1. **Lodash 原生别名**：例如 `each` 映射为 `forEach`、`first` 映射为 `head`、`entries` 映射为 `toPairs`
+2. **Ramda 风格别名**：为了方便 Ramda 用户迁移，提供了大量对应别名，例如：
+   - `pipe` → `flow`
+   - `prop` / `path` / `property` → `get`
+   - `propOr` / `pathOr` → `getOr`
+   - `assoc` / `assocPath` → `set`
+   - `F` → `stubFalse`、`T` → `stubTrue`
+   - `compose` → `flowRight`
+   - `contains` → `includes`
+
+别名映射关系维护在 `mapping.aliasToReal` 中，转换时会自动将别名指向对应的真实方法，同时 `mapping.realToAlias` 会维护反向映射，确保所有别名都能正确关联。
+
+如果需要查看某个具体方法的别名，或者确认方法的映射关系，可以参考对应 API 参考文档，例如 <Link href="/api-reference/object">对象类 API</Link> 中会标注 `get` 方法的所有别名。
+
+---
+
+# 迁移方法
+
+## 从标准 Lodash 迁移
+
+如果你已经在使用标准 Lodash，迁移到 lodash/fp 只需要调整引入方式和调用逻辑：
+
+1. **修改引入方式**：将 `const _ = require('lodash')` 改为 `const fp = require('lodash/fp')`，或者按需引入单个 fp 方法：`const { get, map } = require('lodash/fp')`
+2. **调整参数顺序**：将原来数据优先的调用改为配置优先、数据最后的调用，例如：
+   ```js
+   // 标准 Lodash
+   _.map(users, user => user.name);
+
+   // lodash/fp
+   fp.map(user => user.name, users);
+   ```
+3. **移除手动柯里化**：不需要再手动调用 `_.curry`，fp 方法已经自动柯里化
+4. **无需手动克隆数据**：原来为了避免修改原数据做的克隆操作可以移除，fp 方法会自动处理不可变逻辑
+
+## 从 Ramda 迁移
+
+lodash/fp 提供了大量 Ramda 兼容别名，大部分场景可以直接替换：
+1. **替换引入**：将 `const R = require('ramda')` 改为 `const fp = require('lodash/fp')`
+2. **使用别名调用**：直接使用 Ramda 风格的方法名即可，例如 `fp.pipe` 替代 `R.pipe`，`fp.prop` 替代 `R.prop`
+3. **注意差异**：少部分方法的参数细节可能和 Ramda 有细微差异，建议迁移后做简单的功能验证
+
+如果需要了解 Lodash 的安装和快速上手，可以参考 <Link href="/quickstart">快速开始</Link> 和 <Link href="/installation">安装指南</Link> 页面。
+
+---
+
+# 转换配置选项
+
+`baseConvert` 函数支持通过 `options` 参数自定义转换规则，你可以根据需求调整 fp 方法的行为：
+
+<Table>
+    <TableRow>
+        <TableCell>
+            选项
+        </TableCell>
+        <TableCell>
+            默认值
+        </TableCell>
+        <TableCell>
+            说明
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            curry
+        </TableCell>
+        <TableCell>
+            true
+        </TableCell>
+        <TableCell>
+            是否开启自动柯里化，设为 false 可关闭
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            fixed
+        </TableCell>
+        <TableCell>
+            true
+        </TableCell>
+        <TableCell>
+            是否固定方法元数，设为 false 可关闭
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            rearg
+        </TableCell>
+        <TableCell>
+            true
+        </TableCell>
+        <TableCell>
+            是否调整参数顺序为 iteratee-first data-last，设为 false 可关闭
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            immutable
+        </TableCell>
+        <TableCell>
+            true
+        </TableCell>
+        <TableCell>
+            是否开启不可变操作，设为 false 可关闭
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            cap
+        </TableCell>
+        <TableCell>
+            true
+        </TableCell>
+        <TableCell>
+            是否限制迭代器的参数数量，设为 false 可关闭
+        </TableCell>
+    </TableRow>
+</Table>
+
+使用示例：
+```js
+const _ = require('lodash');
+// 生成一个不柯里化、不调整参数顺序的 fp 风格 lodash
+const customFp = _.runInContext().convert({
+  curry: false,
+  rearg: false
+});
+```
+
+---
+
+# 相关资源
+
+- 项目首页：<Link href="/index">Lodash 首页</Link>
+- 贡献指南：<Link href="/project/contributing">贡献指南</Link>
+- 治理规则：<Link href="/project/governance">治理文档</Link>
+- 全量 API 参考：
+  <BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/array">数组类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/collection">集合类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/object">对象类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/function">函数类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/lang">语言类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/math">数学类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/number">数字类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/string">字符串类 API</Link>
+      </BulletedList>
+      <BulletedList>
+          <Link href="/api-reference/util">工具类 API</Link>
+      </BulletedList>
+  </BulletedList>
