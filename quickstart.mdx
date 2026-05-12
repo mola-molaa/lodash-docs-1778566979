@@ -1,0 +1,201 @@
+---
+title: Quickstart
+icon: 🚀
+---
+
+<Heading level="1">
+    Quickstart
+</Heading>
+
+<Paragraph>
+    This guide will help you get started with Lodash in just a few minutes. You can use Lodash directly in the browser, or install it in a Node.js environment for more structured development.
+</Paragraph>
+
+<Heading level="2">
+    Browser Usage
+</Heading>
+
+<Paragraph>
+    The simplest way to use Lodash is to include it directly via a <Mark bold>script tag</Mark> in your HTML file. You can download the build files or use a CDN.
+</Paragraph>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Build Type
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+        <TableCell>
+            Gzipped Size
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Core Build
+        </TableCell>
+        <TableCell>
+            Includes only core methods, minimal footprint
+        </TableCell>
+        <TableCell>
+            ~4 kB
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Full Build
+        </TableCell>
+        <TableCell>
+            Includes all Lodash methods
+        </TableCell>
+        <TableCell>
+            ~24 kB
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Paragraph>
+    Add the following script tag to your HTML to load Lodash from the CDN:
+</Paragraph>
+
+<Paragraph>
+    <Mark backgroundColor="light_grey">html</Mark>
+</Paragraph>
+
+<Paragraph>
+    &lt;script src="https://cdn.jsdelivr.net/npm/lodash@4.18.1/lodash.min.js"&gt;&lt;/script&gt;
+</Paragraph>
+
+<Paragraph>
+    Once loaded, the global variable <Mark color="blue">_</Mark> is available for you to use Lodash methods directly:
+</Paragraph>
+
+<Paragraph>
+    <Mark backgroundColor="light_grey">html</Mark>
+</Paragraph>
+
+<Paragraph>
+    &lt;script&gt;<br/>
+    &nbsp;&nbsp;var result = _.map([1, 2, 3], function(n) { return n * 3; });<br/>
+    &nbsp;&nbsp;console.log(result); // outputs: [3, 6, 9]<br/>
+    &lt;/script&gt;
+</Paragraph>
+
+<Divider />
+
+<Heading level="2">
+    Node.js Environment
+</Heading>
+
+<Paragraph>
+    For Node.js projects, it is recommended to install Lodash via <Mark bold>npm</Mark> (Node Package Manager).
+</Paragraph>
+
+<Heading level="3">
+    Install Lodash
+</Heading>
+
+<Paragraph>
+    Run the following command in your terminal to add Lodash to your project dependencies:
+</Paragraph>
+
+<Paragraph>
+    <Mark backgroundColor="light_grey">shell</Mark>
+</Paragraph>
+
+<Paragraph>
+    $ npm install --save lodash
+</Paragraph>
+
+<Heading level="3">
+    Basic Usage
+</Heading>
+
+<Paragraph>
+    After installation, you can require Lodash in your JavaScript files in different ways depending on your needs:
+</Paragraph>
+
+<Paragraph>
+    <Mark backgroundColor="light_grey">js</Mark>
+</Paragraph>
+
+<Paragraph>
+    // Load the full build.<br/>
+    var _ = require('lodash');<br/>
+    <br/>
+    // Load the core build (smaller size).<br/>
+    var _ = require('lodash/core');<br/>
+    <br/>
+    // Load the FP build for immutable, auto-curried methods.<br/>
+    var fp = require('lodash/fp');<br/>
+    <br/>
+    // Load specific method categories.<br/>
+    var array = require('lodash/array');<br/>
+    var object = require('lodash/fp/object');<br/>
+    <br/>
+    // Cherry-pick individual methods for smaller bundles.<br/>
+    var at = require('lodash/at');<br/>
+    var curryN = require('lodash/fp/curryN');
+</Paragraph>
+
+<Paragraph>
+    Here is a simple example of using Lodash in a Node.js script:
+</Paragraph>
+
+<Paragraph>
+    <Mark backgroundColor="light_grey">js</Mark>
+</Paragraph>
+
+<Paragraph>
+    var _ = require('lodash');<br/>
+    <br/>
+    var users = [<br/>
+    &nbsp;&nbsp;{ 'user': 'Alice', 'age': 28 },<br/>
+    &nbsp;&nbsp;{ 'user': 'Bob', 'age': 32 },<br/>
+    &nbsp;&nbsp;{ 'user': 'Charlie', 'age': 25 }<br/>
+    ];<br/>
+    <br/>
+    // Get the names of users older than 26<br/>
+    var result = _.chain(users)<br/>
+    &nbsp;&nbsp;.filter(function(user) { return user.age > 26; })<br/>
+    &nbsp;&nbsp;.map('user')<br/>
+    &nbsp;&nbsp;.value();<br/>
+    <br/>
+    console.log(result); // outputs: ['Alice', 'Bob']
+</Paragraph>
+
+<Divider />
+
+<Heading level="2">
+    Next Steps
+</Heading>
+
+<Paragraph>
+    Now that you have Lodash up and running, you can explore more about its architecture, functional programming utilities, and detailed API references:
+</Paragraph>
+
+<BulletedList>
+    <Link href="/installation">Complete Installation Guide</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/concepts/architecture">Lodash Architecture</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/concepts/fp">Functional Programming with Lodash FP</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/array">Array API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/object">Object API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/function">Function API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/project/governance">Project Governance</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/project/contributing">How to Contribute</Link>
+</BulletedList>
