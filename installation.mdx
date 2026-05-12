@@ -1,0 +1,217 @@
+---
+title: Installation
+icon: 📦
+---
+
+<Heading level="1">
+    构建版本
+</Heading>
+
+Lodash 提供三种核心构建产物，适用于不同场景下的体积与功能需求平衡。
+
+<Table>
+    <TableRow>
+        <TableCell>
+            构建名
+        </TableCell>
+        <TableCell>
+            模块入口
+        </TableCell>
+        <TableCell>
+            大小（gzipped）
+        </TableCell>
+        <TableCell>
+            说明
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Core（核心版）
+        </TableCell>
+        <TableCell>
+            <Mark color="blue">lodash/core</Mark>
+        </TableCell>
+        <TableCell>
+            ~4 kB
+        </TableCell>
+        <TableCell>
+            仅包含高频使用的核心方法，体积最小，适合对包体积极为敏感的场景。
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Full（完整版）
+        </TableCell>
+        <TableCell>
+            <Mark color="blue">lodash</Mark>
+        </TableCell>
+        <TableCell>
+            ~24 kB
+        </TableCell>
+        <TableCell>
+            包含 Lodash 全部标准方法，适合大多数通用项目直接使用。
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            FP（函数式版）
+        </TableCell>
+        <TableCell>
+            <Mark color="blue">lodash/fp</Mark>
+        </TableCell>
+        <TableCell>
+            基于完整版
+        </TableCell>
+        <TableCell>
+            方法经过柯里化，采用 <Mark bold>iteratee-first, data-last</Mark> 的不可变风格，适合函数式编程场景，详见 <Link href="/concepts/fp">FP 概念</Link>。
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Callout icon="💡" blockColor="light_blue" borderColor="blue">
+    你可以先阅读 <Link href="/concepts/architecture">架构概览</Link> 了解整体模块设计，再决定适合你的构建版本。
+</Callout>
+
+<Heading level="1">
+    模块格式
+</Heading>
+
+Lodash 支持多种模块格式，你可以根据项目技术栈选择最合适的引入方式。
+
+<BulletedList>
+    标准 CommonJS / UMD 包：<Mark color="blue">lodash</Mark>，可直接用于 Node.js 或浏览器 <Mark bold>script</Mark> 标签引入。
+</BulletedList>
+<BulletedList>
+    ES Module 包：<Mark color="blue">lodash-es</Mark>，适用于现代构建工具与 Tree Shaking。
+</BulletedList>
+<BulletedList>
+    函数式编程包：<Mark color="blue">lodash/fp</Mark>，不可变、自动柯里化方法集合。
+</BulletedList>
+<BulletedList>
+    AMD 版本：<Mark color="blue">lodash-amd</Mark>，适用于 RequireJS 等 AMD 环境。
+</BulletedList>
+<BulletedList>
+    按方法拆分包：npm 上提供 <Mark color="blue">lodash-modularized</Mark> 系列，可按需安装单个方法包。
+</BulletedList>
+
+<Heading level="1">
+    安装与引入
+</Heading>
+
+<Heading level="2">
+    浏览器直接引入
+</Heading>
+
+通过 <Mark bold>script</Mark> 标签加载 UMD 构建产物后，全局会暴露 <Mark color="blue">_</Mark> 变量：
+
+```html
+<script src="lodash.js"></script>
+```
+
+<Heading level="2">
+    npm 安装
+</Heading>
+
+使用 npm 安装完整版 Lodash：
+
+```shell
+$ npm i --save lodash
+```
+
+安装完成后即可在 Node.js 或构建工具中引入：
+
+```js
+// 完整构建
+var _ = require('lodash');
+
+// 核心构建
+var _ = require('lodash/core');
+
+// FP 构建（不可变、自动柯里化）
+var fp = require('lodash/fp');
+
+// 按分类引入
+var array = require('lodash/array');
+var object = require('lodash/fp/object');
+```
+
+<Heading level="2">
+    ES Module 引入
+</Heading>
+
+如果你的项目使用 ES Module，推荐安装 <Mark color="blue">lodash-es</Mark> 以获得更好的 Tree Shaking 支持：
+
+```shell
+$ npm i --save lodash-es
+```
+
+```js
+import _ from 'lodash-es';
+// 或按需引入
+import { debounce, throttle } from 'lodash-es';
+import { curryN } from 'lodash-es/fp';
+```
+
+<Heading level="2">
+    构建工具中的按需引入
+</Heading>
+
+为减少最终 bundle 体积，建议在打包工具中按方法路径引入，实现精确加载。
+
+<Heading level="3">
+    Browserify / Rollup
+</Heading>
+
+这类工具支持直接解析 Lodash 内部路径，可按方法引入：
+
+```js
+var at = require('lodash/at');
+var curryN = require('lodash/fp/curryN');
+```
+
+配合 <Link href="https://www.npmjs.com/package/babel-plugin-lodash">babel-plugin-lodash</Link> 还能进一步简化写法。
+
+<Heading level="3">
+    Webpack
+</Heading>
+
+Webpack 环境下同样支持路径引入，也可以结合以下工具优化：
+
+<BulletedList>
+    使用 <Mark color="blue">lodash-webpack-plugin</Mark> 进一步剔除未使用功能。
+</BulletedList>
+<BulletedList>
+    搭配 <Mark color="blue">babel-plugin-lodash</Mark> 实现自动按需引入。
+</BulletedList>
+
+```js
+// 按需引入示例
+var at = require('lodash/at');
+var curryN = require('lodash/fp/curryN');
+```
+
+<Heading level="1">
+    相关资源
+</Heading>
+
+<BulletedList>
+    <Link href="/quickstart">快速上手</Link>：安装完成后可从此处开始使用。
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/array">Array API</Link>：数组相关方法参考。
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/collection">Collection API</Link>：集合相关方法参考。
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/object">Object API</Link>：对象相关方法参考。
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/function">Function API</Link>：函数相关方法参考。
+</BulletedList>
+<BulletedList>
+    <Link href="/project/governance">治理架构</Link>：了解 Lodash 项目治理与维护现状。
+</BulletedList>
+<BulletedList>
+    <Link href="/project/contributing">贡献指南</Link>：如果你想参与 Lodash 开发，从这里开始。
+</BulletedList>
