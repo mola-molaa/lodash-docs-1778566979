@@ -1,0 +1,824 @@
+---
+title: String Methods
+icon: 🔤
+---
+
+# String Methods
+
+Lodash 提供了一系列用于处理字符串的实用方法，涵盖格式转换、内容检查、填充截断、替换拆分等场景。本文档详细说明各字符串方法的用法、参数、返回值及示例。
+
+## camelCase
+
+将字符串转换为驼峰命名法（camelCase）。
+
+### 语法
+```
+_.camelCase([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回驼峰格式的字符串。
+
+### 示例
+```js
+_.camelCase('Foo Bar');
+// => 'fooBar'
+
+_.camelCase('--foo-bar--');
+// => 'fooBar'
+
+_.camelCase('__FOO_BAR__');
+// => 'fooBar'
+```
+
+## capitalize
+
+将字符串的首字母转为大写，其余转为小写。
+
+### 语法
+```
+_.capitalize([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要首字母大写的字符串。
+
+### 返回值
+*(string)*: 返回首字母大写的字符串。
+
+### 示例
+```js
+_.capitalize('FRED');
+// => 'Fred'
+```
+
+## deburr
+
+将字符串中的 Latin-1 Supplement 和 Latin Extended-A 字母转换为基本拉丁字母，并移除组合变音标记。
+
+### 语法
+```
+_.deburr([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要处理的字符串。
+
+### 返回值
+*(string)*: 返回处理后的字符串。
+
+### 示例
+```js
+_.deburr('déjà vu');
+// => 'deja vu'
+```
+
+## endsWith
+
+检查字符串是否以指定的目标字符串结尾。
+
+### 语法
+```
+_.endsWith([string=''], [target], [position=string.length])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要检查的字符串。
+2. `[target]` *(string)*: 要搜索的目标字符串。
+3. `[position=string.length]` *(number)*: 检查到此位置的字符为止。
+
+### 返回值
+*(boolean)*: 如果字符串以目标字符串结尾则返回 `true`，否则返回 `false`。
+
+### 示例
+```js
+_.endsWith('abc', 'c');
+// => true
+
+_.endsWith('abc', 'b');
+// => false
+
+_.endsWith('abc', 'b', 2);
+// => true
+```
+
+## escape
+
+将字符串中的 `&`、`<`、`>`、`"`、`'` 转换为对应的 HTML 实体。
+
+### 语法
+```
+_.escape([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转义的字符串。
+
+### 返回值
+*(string)*: 返回转义后的字符串。
+
+### 示例
+```js
+_.escape('fred, barney, & pebbles');
+// => 'fred, barney, &amp; pebbles'
+```
+
+## escapeRegExp
+
+转义字符串中的正则表达式特殊字符：`^`、`$`、`\`、`.`、`*`、`+`、`?`、`(`、`)`、`[`、`]`、`{`、`}`、`|`。
+
+### 语法
+```
+_.escapeRegExp([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转义的字符串。
+
+### 返回值
+*(string)*: 返回转义后的字符串。
+
+### 示例
+```js
+_.escapeRegExp('[lodash](https://lodash.com/)');
+// => '\[lodash\]\(https://lodash\.com/\)'
+```
+
+## kebabCase
+
+将字符串转换为短横线命名法（kebab-case）。
+
+### 语法
+```
+_.kebabCase([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回短横线格式的字符串。
+
+### 示例
+```js
+_.kebabCase('Foo Bar');
+// => 'foo-bar'
+
+_.kebabCase('fooBar');
+// => 'foo-bar'
+
+_.kebabCase('__FOO_BAR__');
+// => 'foo-bar'
+```
+
+## lowerCase
+
+将字符串按空格分隔的单词转换为小写。
+
+### 语法
+```
+_.lowerCase([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回小写的字符串。
+
+### 示例
+```js
+_.lowerCase('--Foo-Bar--');
+// => 'foo bar'
+
+_.lowerCase('fooBar');
+// => 'foo bar'
+
+_.lowerCase('__FOO_BAR__');
+// => 'foo bar'
+```
+
+## lowerFirst
+
+将字符串的首字母转为小写。
+
+### 语法
+```
+_.lowerFirst([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回转换后的字符串。
+
+### 示例
+```js
+_.lowerFirst('Fred');
+// => 'fred'
+
+_.lowerFirst('FRED');
+// => 'fRED'
+```
+
+## pad
+
+如果字符串长度小于指定长度，则在左右两侧填充字符。
+
+### 语法
+```
+_.pad([string=''], [length=0], [chars=' '])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要填充的字符串。
+2. `[length=0]` *(number)*: 填充后的总长度。
+3. `[chars=' ']` *(string)*: 用于填充的字符。
+
+### 返回值
+*(string)*: 返回填充后的字符串。
+
+### 示例
+```js
+_.pad('abc', 8);
+// => '  abc   '
+
+_.pad('abc', 8, '_-');
+// => '_-abc_-_'
+
+_.pad('abc', 3);
+// => 'abc'
+```
+
+## padEnd
+
+如果字符串长度小于指定长度，则在右侧填充字符。
+
+### 语法
+```
+_.padEnd([string=''], [length=0], [chars=' '])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要填充的字符串。
+2. `[length=0]` *(number)*: 填充后的总长度。
+3. `[chars=' ']` *(string)*: 用于填充的字符。
+
+### 返回值
+*(string)*: 返回填充后的字符串。
+
+### 示例
+```js
+_.padEnd('abc', 6);
+// => 'abc   '
+
+_.padEnd('abc', 6, '_-');
+// => 'abc_-_'
+
+_.padEnd('abc', 3);
+// => 'abc'
+```
+
+## padStart
+
+如果字符串长度小于指定长度，则在左侧填充字符。
+
+### 语法
+```
+_.padStart([string=''], [length=0], [chars=' '])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要填充的字符串。
+2. `[length=0]` *(number)*: 填充后的总长度。
+3. `[chars=' ']` *(string)*: 用于填充的字符。
+
+### 返回值
+*(string)*: 返回填充后的字符串。
+
+### 示例
+```js
+_.padStart('abc', 6);
+// => '   abc'
+
+_.padStart('abc', 6, '_-');
+// => '_-_abc'
+
+_.padStart('abc', 3);
+// => 'abc'
+```
+
+## parseInt
+
+将字符串转换为指定进制的整数。
+
+### 语法
+```
+_.parseInt(string, [radix=10])
+```
+
+### 参数
+1. `string` *(string)*: 要转换的字符串。
+2. `[radix=10]` *(number)*: 转换时使用的进制。
+
+### 返回值
+*(number)*: 返回转换后的整数。
+
+### 示例
+```js
+_.parseInt('08');
+// => 8
+
+_.map(['6', '08', '10'], _.parseInt);
+// => [6, 8, 10]
+```
+
+## repeat
+
+将字符串重复指定次数。
+
+### 语法
+```
+_.repeat([string=''], [n=1])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要重复的字符串。
+2. `[n=1]` *(number)*: 重复的次数。
+
+### 返回值
+*(string)*: 返回重复后的字符串。
+
+### 示例
+```js
+_.repeat('*', 3);
+// => '***'
+
+_.repeat('abc', 2);
+// => 'abcabc'
+
+_.repeat('abc', 0);
+// => ''
+```
+
+## replace
+
+替换字符串中匹配 `pattern` 的内容为 `replacement`。
+
+### 语法
+```
+_.replace([string=''], pattern, replacement)
+```
+
+### 参数
+1. `[string='']` *(string)*: 要修改的字符串。
+2. `pattern` *(RegExp|string)*: 要匹配的模式。
+3. `replacement` *(Function|string)*: 替换的内容。
+
+### 返回值
+*(string)*: 返回修改后的字符串。
+
+### 示例
+```js
+_.replace('Hi Fred', 'Fred', 'Barney');
+// => 'Hi Barney'
+```
+
+## snakeCase
+
+将字符串转换为下划线命名法（snake_case）。
+
+### 语法
+```
+_.snakeCase([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回下划线格式的字符串。
+
+### 示例
+```js
+_.snakeCase('Foo Bar');
+// => 'foo_bar'
+
+_.snakeCase('fooBar');
+// => 'foo_bar'
+
+_.snakeCase('--FOO-BAR--');
+// => 'foo_bar'
+```
+
+## split
+
+按照分隔符拆分字符串。
+
+### 语法
+```
+_.split([string=''], separator, [limit])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要拆分的字符串。
+2. `separator` *(RegExp|string)*: 拆分使用的分隔符。
+3. `[limit]` *(number)*: 结果截断的长度。
+
+### 返回值
+*(Array)*: 返回拆分后的字符串片段数组。
+
+### 示例
+```js
+_.split('a-b-c', '-', 2);
+// => ['a', 'b']
+```
+
+## startCase
+
+将字符串转换为首字母大写格式（start case）。
+
+### 语法
+```
+_.startCase([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回首字母大写格式的字符串。
+
+### 示例
+```js
+_.startCase('--foo-bar--');
+// => 'Foo Bar'
+
+_.startCase('fooBar');
+// => 'Foo Bar'
+
+_.startCase('__FOO_BAR__');
+// => 'FOO BAR'
+```
+
+## startsWith
+
+检查字符串是否以指定的目标字符串开头。
+
+### 语法
+```
+_.startsWith([string=''], [target], [position=0])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要检查的字符串。
+2. `[target]` *(string)*: 要搜索的目标字符串。
+3. `[position=0]` *(number)*: 从该位置开始搜索。
+
+### 返回值
+*(boolean)*: 如果字符串以目标字符串开头则返回 `true`，否则返回 `false`。
+
+### 示例
+```js
+_.startsWith('abc', 'a');
+// => true
+
+_.startsWith('abc', 'b');
+// => false
+
+_.startsWith('abc', 'b', 1);
+// => true
+```
+
+## template
+
+创建一个编译后的模板函数，支持插值、HTML 转义、执行 JavaScript 代码等功能。
+
+<Callout icon="⚠️" blockColor="yellow" borderColor="light_orange">
+    <Mark bold>安全提示</Mark>：`_.template` 存在安全风险，不建议使用，Lodash v5 版本将会移除该方法，请避免处理不可信的输入。
+</Callout>
+
+### 语法
+```
+_.template([string=''], [options={}])
+```
+
+### 参数
+1. `[string='']` *(string)*: 模板字符串。
+2. `[options={}]` *(Object)*: 配置对象。
+3. `[options.escape=_.templateSettings.escape]` *(RegExp)*: HTML 转义分隔符。
+4. `[options.evaluate=_.templateSettings.evaluate]` *(RegExp)*: 执行代码分隔符。
+5. `[options.imports=_.templateSettings.imports]` *(Object)*: 导入到模板中的自由变量对象。
+6. `[options.interpolate=_.templateSettings.interpolate]` *(RegExp)*: 插值分隔符。
+7. `[options.sourceURL='lodash.templateSources[n]']` *(string)*: 编译模板的 sourceURL。
+8. `[options.variable='obj']` *(string)*: 数据对象的变量名。
+
+### 返回值
+*(Function)*: 返回编译后的模板函数。
+
+### 示例
+```js
+// 使用插值分隔符创建编译模板
+var compiled = _.template('hello <%= user %>!');
+compiled({ 'user': 'fred' });
+// => 'hello fred!'
+
+// 使用 HTML 转义分隔符转义数据属性值
+var compiled = _.template('<b><%- value %></b>');
+compiled({ 'value': '<script>' });
+// => '<b>&lt;script&gt;</b>'
+
+// 使用执行分隔符运行 JavaScript 并生成 HTML
+var compiled = _.template('<% _.forEach(users, function(user) { %><li><%- user %></li><% }); %>');
+compiled({ 'users': ['fred', 'barney'] });
+// => '<li>fred</li><li>barney</li>'
+```
+
+## toLower
+
+将整个字符串转换为小写，等价于 `String#toLowerCase`。
+
+### 语法
+```
+_.toLower([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回小写的字符串。
+
+### 示例
+```js
+_.toLower('--Foo-Bar--');
+// => '--foo-bar--'
+
+_.toLower('fooBar');
+// => 'foobar'
+
+_.toLower('__FOO_BAR__');
+// => '__foo_bar__'
+```
+
+## toUpper
+
+将整个字符串转换为大写，等价于 `String#toUpperCase`。
+
+### 语法
+```
+_.toUpper([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回大写的字符串。
+
+### 示例
+```js
+_.toUpper('--foo-bar--');
+// => '--FOO-BAR--'
+
+_.toUpper('fooBar');
+// => 'FOOBAR'
+
+_.toUpper('__foo_bar__');
+// => '__FOO_BAR__'
+```
+
+## trim
+
+移除字符串首尾的空白字符或指定字符。
+
+### 语法
+```
+_.trim([string=''], [chars=whitespace])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要修剪的字符串。
+2. `[chars=whitespace]` *(string)*: 要移除的字符。
+
+### 返回值
+*(string)*: 返回修剪后的字符串。
+
+### 示例
+```js
+_.trim('  abc  ');
+// => 'abc'
+
+_.trim('-_-abc-_-', '_-');
+// => 'abc'
+
+_.map(['  foo  ', '  bar  '], _.trim);
+// => ['foo', 'bar']
+```
+
+## trimEnd
+
+移除字符串尾部的空白字符或指定字符。
+
+### 语法
+```
+_.trimEnd([string=''], [chars=whitespace])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要修剪的字符串。
+2. `[chars=whitespace]` *(string)*: 要移除的字符。
+
+### 返回值
+*(string)*: 返回修剪后的字符串。
+
+### 示例
+```js
+_.trimEnd('  abc  ');
+// => '  abc'
+
+_.trimEnd('-_-abc-_-', '_-');
+// => '-_-abc'
+```
+
+## trimStart
+
+移除字符串首部的空白字符或指定字符。
+
+### 语法
+```
+_.trimStart([string=''], [chars=whitespace])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要修剪的字符串。
+2. `[chars=whitespace]` *(string)*: 要移除的字符。
+
+### 返回值
+*(string)*: 返回修剪后的字符串。
+
+### 示例
+```js
+_.trimStart('  abc  ');
+// => 'abc  '
+
+_.trimStart('-_-abc-_-', '_-');
+// => 'abc-_-'
+```
+
+## truncate
+
+如果字符串长度超过指定最大长度，则截断字符串，末尾替换为省略字符串（默认为 `...`）。
+
+### 语法
+```
+_.truncate([string=''], [options={}])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要截断的字符串。
+2. `[options={}]` *(Object)*: 配置对象。
+3. `[options.length=30]` *(number)*: 最大字符串长度。
+4. `[options.omission='...']` *(string)*: 表示文本被省略的字符串。
+5. `[options.separator]` *(RegExp|string)*: 截断到的分隔符模式。
+
+### 返回值
+*(string)*: 返回截断后的字符串。
+
+### 示例
+```js
+_.truncate('hi-diddly-ho there, neighborino');
+// => 'hi-diddly-ho there, neighbo...'
+
+_.truncate('hi-diddly-ho there, neighborino', {
+  'length': 24,
+  'separator': ' '
+});
+// => 'hi-diddly-ho there,...'
+
+_.truncate('hi-diddly-ho there, neighborino', {
+  'length': 24,
+  'separator': /,? +/
+});
+// => 'hi-diddly-ho there...'
+
+_.truncate('hi-diddly-ho there, neighborino', {
+  'omission': ' [...]'
+});
+// => 'hi-diddly-ho there, neig [...]'
+```
+
+## unescape
+
+`_.escape` 的逆操作，将 HTML 实体 `&amp;`、`&lt;`、`&gt;`、`&quot;`、`&#39;` 转换为对应的字符。
+
+### 语法
+```
+_.unescape([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要反转义的字符串。
+
+### 返回值
+*(string)*: 返回反转义后的字符串。
+
+### 示例
+```js
+_.unescape('fred, barney, &amp; pebbles');
+// => 'fred, barney, & pebbles'
+```
+
+## upperCase
+
+将字符串转换为全大写格式（按空格分隔的单词每个首字母大写）。
+
+### 语法
+```
+_.upperCase([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回全大写格式的字符串。
+
+### 示例
+```js
+_.upperCase('--foo-bar--');
+// => 'FOO BAR'
+
+_.upperCase('fooBar');
+// => 'FOO BAR'
+
+_.upperCase('__FOO_BAR__');
+// => 'FOO BAR'
+```
+
+## upperFirst
+
+将字符串的首字母转为大写。
+
+### 语法
+```
+_.upperFirst([string=''])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要转换的字符串。
+
+### 返回值
+*(string)*: 返回转换后的字符串。
+
+### 示例
+```js
+_.upperFirst('fred');
+// => 'Fred'
+
+_.upperFirst('FRED');
+// => 'FRED'
+```
+
+## words
+
+将字符串拆分为单词数组。
+
+### 语法
+```
+_.words([string=''], [pattern])
+```
+
+### 参数
+1. `[string='']` *(string)*: 要拆分的字符串。
+2. `[pattern]` *(RegExp)*: 匹配单词的模式。
+
+### 返回值
+*(Array)*: 返回单词数组。
+
+### 示例
+```js
+_.words('fred, barney, & pebbles');
+// => ['fred', 'barney', 'pebbles']
+
+_.words('fred, barney, & pebbles', /[^, ]+/g);
+// => ['fred', 'barney', '&', 'pebbles']
+```
+
+## 相关参考
+
+<Paragraph>
+    更多 Lodash 方法参考：
+    <Link href="/api-reference/array">Array Methods</Link>、
+    <Link href="/api-reference/object">Object Methods</Link>、
+    <Link href="/api-reference/function">Function Methods</Link>、
+    <Link href="/api-reference/lang">Lang Methods</Link>、
+    <Link href="/api-reference/math">Math Methods</Link>
+</Paragraph>
+<Paragraph>
+    返回 <Link href="/index">首页</Link> 或查看 <Link href="/quickstart">快速开始</Link> 了解基础用法。
+</Paragraph>
