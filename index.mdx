@@ -1,0 +1,308 @@
+---
+title: Introduction
+icon: 📘
+cover: https://lodash.com/images/logo.png
+---
+
+Lodash 是一个致力于提升 JavaScript 开发效率的实用工具库，以模块化、高性能的函数集著称。它把日常开发中频繁出现的数组、对象、字符串、函数式操作等场景抽象为稳定、可复用的工具方法，让开发者能够以更简洁、一致的方式处理数据，降低样板代码与潜在错误。
+
+<Heading level="2">
+    项目定位
+</Heading>
+
+Lodash 的核心定位是 <Mark bold>JavaScript 标准库的有力补充</Mark>。尽管 ES6+ 已经内置了许多实用方法（如 `Array.prototype.map`、`Object.entries` 等），但 Lodash 在以下方面仍具有独特价值：
+
+<BulletedList>
+    提供更丰富的工具函数，覆盖细粒度场景（如深度比较、深拷贝、函数节流与防抖等）
+</BulletedList>
+<BulletedList>
+    保证跨环境、跨版本的行为一致性，避免不同 JS 引擎或标准演进带来的差异
+</BulletedList>
+<BulletedList>
+    通过多种模块格式（UMD、CommonJS、ES Module、FP 模块等）适配不同构建场景
+</BulletedList>
+<BulletedList>
+    支持按需引入与 tree-shaking，帮助优化最终产物体积
+</BulletedList>
+
+当前 Lodash 版本为 <Mark bold>v4.18.1</Mark>，采用 MIT 开源协议，支持 Node.js 4.0.0 及以上运行环境，同时兼容现代浏览器。
+
+<Heading level="2">
+    核心功能
+</Heading>
+
+Lodash 的方法被划分为多个功能类别，几乎覆盖日常开发的主要数据处理需求：
+
+<Table>
+    <TableRow>
+        <TableCell>
+            分类
+        </TableCell>
+        <TableCell>
+            说明
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Array
+        </TableCell>
+        <TableCell>
+            数组切片、扁平化、去重、分块、差集、交集等操作
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Collection
+        </TableCell>
+        <TableCell>
+            统一迭代数组与对象，提供 countBy、groupBy、shuffle 等方法
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Object
+        </TableCell>
+        <TableCell>
+            对象深拷贝、合并、键值操作、路径访问、属性过滤等
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            函数节流、防抖、柯里化、绑定上下文、once、memoize 等
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Lang
+        </TableCell>
+        <TableCell>
+            类型判断、空值检测、深比较等语言增强能力
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Math / Number
+        </TableCell>
+        <TableCell>
+            数值裁剪、四舍五入、随机数生成、数值比较等
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            String
+        </TableCell>
+        <TableCell>
+            字符串大小写转换、模板、截断、重复、填充等
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Util
+        </TableCell>
+        <TableCell>
+            通用工具方法，如 noop、identity、times、range 等
+        </TableCell>
+    </TableRow>
+</Table>
+
+你可以通过左侧导航或以下链接快速访问各分类 API：
+
+<BulletedList>
+    <Link href="/api-reference/array">Array API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/collection">Collection API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/object">Object API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/function">Function API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/lang">Lang API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/math">Math API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/number">Number API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/string">String API Reference</Link>
+</BulletedList>
+<BulletedList>
+    <Link href="/api-reference/util">Util API Reference</Link>
+</BulletedList>
+
+<Heading level="2">
+    适用场景
+</Heading>
+
+Lodash 适用于绝大多数 JavaScript / TypeScript 项目，尤其在以下场景中优势明显：
+
+<NumberedList>
+    数据处理密集的前端应用（如表格、列表、表单、状态数据转换）
+</NumberedList>
+<NumberedList>
+    需要与后端返回复杂数据结构交互的业务系统
+</NumberedList>
+<NumberedList>
+    希望统一数组与对象迭代方式，减少 if/else 边界判断
+</NumberedList>
+<NumberedList>
+    对函数稳定性、兼容性要求较高的公共库或 SDK 开发
+</NumberedList>
+<NumberedList>
+    希望在引入少量成本的前提下，获得成熟、经过大量项目验证的工具方法
+</NumberedList>
+
+<Callout icon="💡" blockColor="light_blue" borderColor="blue">
+    如果你更偏好函数式编程风格，可以优先使用 <Link href="/concepts/fp">lodash/fp 模块</Link>，它提供自动柯里化、参数顺序优化（iteratee-first, data-last）的不可变风格 API。
+</Callout>
+
+<Heading level="2">
+    同类库对比
+</Heading>
+
+常见的 JavaScript 工具库还包括 Underscore、Ramda 等，它们与 Lodash 在定位与风格上有所区别：
+
+<Table>
+    <TableRow>
+        <TableCell>
+            维度
+        </TableCell>
+        <TableCell>
+            Lodash
+        </TableCell>
+        <TableCell>
+            Underscore
+        </TableCell>
+        <TableCell>
+            Ramda
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            定位
+        </TableCell>
+        <TableCell>
+            通用工具库，补充 JS 标准能力
+        </TableCell>
+        <TableCell>
+            早期通用工具库，API 偏保守
+        </TableCell>
+        <TableCell>
+            函数式编程优先的工具库
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            性能
+        </TableCell>
+        <TableCell>
+            高，经过大量优化
+        </TableCell>
+        <TableCell>
+            中等
+        </TableCell>
+        <TableCell>
+            中等，偏重函数式语义
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            模块化
+        </TableCell>
+        <TableCell>
+            支持多种格式，可按需引入
+        </TableCell>
+        <TableCell>
+            较弱，整体引入为主
+        </TableCell>
+        <TableCell>
+            函数式模块组织
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            函数式支持
+        </TableCell>
+        <TableCell>
+            原生 + 独立 fp 模块
+        </TableCell>
+        <TableCell>
+            基础支持
+        </TableCell>
+        <TableCell>
+            核心设计理念
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            生态与成熟度
+        </TableCell>
+        <TableCell>
+            极高，被广泛使用
+        </TableCell>
+        <TableCell>
+            早期流行，逐步被替代
+        </TableCell>
+        <TableCell>
+            函数式社区活跃
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    版本与治理状态
+</Heading>
+
+Lodash 目前已进入 <Mark bold>Feature-Complete（功能完整）</Mark> 成熟度阶段，未来将更注重稳定性、安全性与长期可持续性，而非持续新增功能。
+
+根据 OpenJS Foundation 博客公告，Lodash 已获得 <Mark bold>Sovereign Tech Agency</Mark> 的支持，并正在重启其治理体系。相关治理细节可在 <Link href="/project/governance">Governance 页面</Link> 查看。
+
+当前技术委员会（TSC）成员包括：
+
+<BulletedList>
+    John-David Dalton（Lodash 创建者）
+</BulletedList>
+<BulletedList>
+    Jon Church
+</BulletedList>
+<BulletedList>
+    Jordan Harband
+</BulletedList>
+<BulletedList>
+    Michał Lipiński
+</BulletedList>
+<BulletedList>
+    Tobie Langel
+</BulletedList>
+<BulletedList>
+    Ulises Gascón
+</BulletedList>
+
+安全评估与发布工作分别由 Security Triage Team 与 Release Team 负责，保障项目在安全与版本管理上的规范性。
+
+<Heading level="2">
+    下一步
+</Heading>
+
+如果你准备开始使用 Lodash，可以参考：
+
+<BulletedList>
+    <Link href="/installation">安装指南</Link>：了解 npm、CDN、模块化引入方式
+</BulletedList>
+<BulletedList>
+    <Link href="/quickstart">快速上手</Link>：通过示例快速掌握常见用法
+</BulletedList>
+<BulletedList>
+    <Link href="/concepts/architecture">架构概览</Link>：理解 Lodash 的模块与构建体系
+</BulletedList>
+<BulletedList>
+    <Link href="/project/contributing">贡献指南</Link>：了解如何参与 Lodash 社区与开发
+</BulletedList>
