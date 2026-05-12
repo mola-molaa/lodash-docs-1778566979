@@ -1,0 +1,104 @@
+---
+title: Number Methods
+icon: 🔢
+---
+
+# Number Methods
+
+lodash 提供了三个专门处理数字的工具方法，分别是 `_.clamp`、`_.inRange` 和 `_.random`，用于数字边界限制、范围判断以及随机数生成场景。
+
+## clamp
+
+`_.clamp(number, [lower], upper)` 用于将数字限制在指定的闭区间 `[lower, upper]` 内。如果数字小于 `lower`，返回 `lower`；如果数字大于 `upper`，返回 `upper`；否则返回原数字本身。
+
+该方法从 lodash v4.0.0 开始提供，接收三个参数：
+- `number`（必填）：要限制边界的数字。
+- `[lower]`（可选）：下界值。
+- `upper`（必填）：上界值。
+
+返回值为经过边界限制后的数字。
+
+### 示例
+```js
+_.clamp(-10, -5, 5);
+// => -5
+
+_.clamp(10, -5, 5);
+// => 5
+```
+
+## inRange
+
+`_.inRange(number, [start=0], end)` 用于检查数字 `number` 是否处于 `[start, end)` 的半开区间内。如果未指定 `end`，则会将 `end` 设为 `start`，同时将 `start` 设为 `0`。如果 `start` 大于 `end`，两个参数会自动交换以支持反向范围。
+
+该方法从 lodash v3.3.0 开始提供，接收三个参数：
+- `number`（必填）：要检查的数字。
+- `[start=0]`（可选）：范围起始值（包含）。
+- `end`（必填）：范围结束值（不包含）。
+
+返回值为布尔值，如果数字在范围内则返回 `true`，否则返回 `false`。
+
+### 示例
+```js
+_.inRange(3, 2, 4);
+// => true
+
+_.inRange(4, 8);
+// => true
+
+_.inRange(4, 2);
+// => false
+
+_.inRange(2, 2);
+// => false
+
+_.inRange(1.2, 2);
+// => true
+
+_.inRange(5.2, 4);
+// => false
+
+_.inRange(-3, -2, -6);
+// => true
+```
+
+## random
+
+`_.random([lower=0], [upper=1], [floating])` 用于生成 `[lower, upper]` 闭区间内的随机数。如果只传入一个参数，会生成 `0` 到该参数之间的随机整数。如果 `floating` 设为 `true`，或者 `lower`、`upper` 中存在浮点数，则会返回浮点随机数。如果 `lower` 大于 `upper`，参数会自动交换。
+
+该方法从 lodash v0.7.0 开始提供，接收三个参数：
+- `[lower=0]`（可选）：下界值。
+- `[upper=1]`（可选）：上界值。
+- `[floating]`（可选）：是否返回浮点数的布尔标识。
+
+返回值为生成的随机数。
+
+### 示例
+```js
+_.random(0, 5);
+// => 0 到 5 之间的整数
+
+// 当下界大于上界时，参数会自动交换
+_.random(5, 0);
+// => 0 到 5 之间的整数
+
+_.random(5);
+// => 0 到 5 之间的整数
+
+_.random(-5);
+// => -5 到 0 之间的整数
+
+_.random(5, true);
+// => 0 到 5 之间的浮点数
+
+_.random(1.2, 5.2);
+// => 1.2 到 5.2 之间的浮点数
+```
+
+## 相关 API 参考
+
+如果需要更多数学运算相关的能力，可以参考 <Link href="/api-reference/math">Math Methods</Link> 页面，其中包含 `_.add`、`_.round`、`_.sum` 等数字计算方法。
+
+如果需要了解 lodash 的基础使用方式，可以查看 <Link href="/quickstart">Quick Start</Link> 和 <Link href="/installation">Installation</Link> 页面。
+
+完整的 API 分类可以参考 <Link href="/api-reference/array">Array Methods</Link>、<Link href="/api-reference/object">Object Methods</Link>、<Link href="/api-reference/string">String Methods</Link> 等其他 API 参考页面。
