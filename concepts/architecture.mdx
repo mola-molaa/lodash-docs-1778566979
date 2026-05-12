@@ -1,0 +1,283 @@
+---
+title: Architecture
+icon: 🏗️
+---
+
+## 什么是 Lodash 架构
+
+Lodash 是一个以<Mark bold>模块化</Mark>、<Mark bold>一致性</Mark>、<Mark bold>高性能</Mark>为核心目标的 JavaScript 工具库。在架构层面，它采用统一的源码组织方式、标准的模块导出格式以及清晰的功能分类策略，使开发者既可以在浏览器中直接使用完整构建，也能在 Node.js 或现代构建工具中按需引入单个方法，获得最优的包体积与运行性能。
+
+## 模块导出方式：UMD
+
+Lodash 默认以 <Link href="https://github.com/umdjs/umd">UMD（Universal Module Definition）</Link> 格式导出，这意味着同一份构建产物可以同时适配多种模块环境：
+
+<Table>
+    <TableRow>
+        <TableCell>
+            环境
+        </TableCell>
+        <TableCell>
+            使用方式
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            浏览器（script 标签）
+        </TableCell>
+        <TableCell>
+            直接加载 lodash.js，挂载全局变量 <Mark color="blue">_</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Node.js（CommonJS）
+        </TableCell>
+        <TableCell>
+            <Mark color="blue">var _ = require('lodash')</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            AMD / RequireJS
+        </TableCell>
+        <TableCell>
+            通过 define 异步加载
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            ES Module（通过 lodash-es）
+        </TableCell>
+        <TableCell>
+            <Mark color="blue">import { debounce } from 'lodash-es'</Mark>
+        </TableCell>
+    </TableRow>
+</Table>
+
+这种 UMD 设计保证了 Lodash 在从传统脚本到现代模块系统的整个 JavaScript 生态中都能无缝使用。
+
+## 功能分类与组织结构
+
+Lodash 将自身提供的数百个工具方法，按照数据类型与用途划分为若干清晰的功能分类。每个分类在源码和包结构中都有对应的独立模块入口，方便按需加载。
+
+### 核心分类
+
+<Table>
+    <TableRow>
+        <TableCell>
+            分类
+        </TableCell>
+        <TableCell>
+            说明
+        </TableCell>
+        <TableCell>
+            API 参考
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Array
+        </TableCell>
+        <TableCell>
+            数组的创建、截取、扁平化、差集、交集等操作
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/array">api-reference/array</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Collection
+        </TableCell>
+        <TableCell>
+            同时适用于数组与对象的迭代、过滤、分组、排序等操作
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/collection">api-reference/collection</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Object
+        </TableCell>
+        <TableCell>
+            对象属性的获取、设置、合并、拷贝、序列化等
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/object">api-reference/object</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            函数相关工具，如节流、防抖、柯里化、函数绑定等
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/function">api-reference/function</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Lang
+        </TableCell>
+        <TableCell>
+            类型判断与类型转换方法
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/lang">api-reference/lang</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Math
+        </TableCell>
+        <TableCell>
+            数学计算相关工具
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/math">api-reference/math</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Number
+        </TableCell>
+        <TableCell>
+            数字处理与区间限制等
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/number">api-reference/number</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            String
+        </TableCell>
+        <TableCell>
+            字符串处理、模板、大小写转换等
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/string">api-reference/string</Link>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Util
+        </TableCell>
+        <TableCell>
+            通用工具方法，如身份函数、空操作函数等
+        </TableCell>
+        <TableCell>
+            <Link href="/api-reference/util">api-reference/util</Link>
+        </TableCell>
+    </TableRow>
+</Table>
+
+### 模块化加载示例
+
+得益于清晰的分类结构，你可以按照分类或方法级别进行按需加载：
+
+<BulletedList>
+    加载完整构建
+    <BulletedList>
+        <Mark color="blue">var _ = require('lodash')</Mark>
+    </BulletedList>
+</BulletedList>
+<BulletedList>
+    加载分类模块
+    <BulletedList>
+        <Mark color="blue">var array = require('lodash/array')</Mark>
+    </BulletedList>
+</BulletedList>
+<BulletedList>
+    加载单个方法（推荐用于现代构建工具）
+    <BulletedList>
+        <Mark color="blue">var debounce = require('lodash/debounce')</Mark>
+    </BulletedList>
+</BulletedList>
+
+## 构建形态
+
+Lodash 提供多种预构建形态，以适应不同场景的需求：
+
+<Table>
+    <TableRow>
+        <TableCell>
+            构建
+        </TableCell>
+        <TableCell>
+            说明
+        </TableCell>
+        <TableCell>
+            体积（gzipped）
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Core
+        </TableCell>
+        <TableCell>
+            核心方法构建，仅包含最常用的方法
+        </TableCell>
+        <TableCell>
+            ~4 kB
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Full
+        </TableCell>
+        <TableCell>
+            完整构建，包含所有工具方法
+        </TableCell>
+        <TableCell>
+            ~24 kB
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            FP
+        </TableCell>
+        <TableCell>
+            函数式编程风格构建，方法自动柯里化、参数顺序调整为 iteratee-first data-last
+        </TableCell>
+        <TableCell>
+            与 full 相近
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            ES Module
+        </TableCell>
+        <TableCell>
+            以 ES Module 格式导出的版本，适合 tree-shaking
+        </TableCell>
+        <TableCell>
+            取决于引入内容
+        </TableCell>
+    </TableRow>
+</Table>
+
+关于 FP 模式的详细设计，可以参考 <Link href="/concepts/fp">FP 指南</Link>。
+
+## 核心设计理念
+
+### 一致性
+
+Lodash 所有方法都遵循统一的 API 设计风格：参数顺序、返回值类型、错误处理方式均保持一致。这降低了学习成本，使开发者在熟悉少量方法后，可以快速上手其他方法。
+
+### 稳定性优先
+
+Lodash 目前已经进入 <Mark bold>Feature-Complete</Mark> 成熟阶段，不再激进地新增功能，而是将重点放在稳定性、安全性与长期可维护性上。更多治理相关信息可参考 <Link href="/project/governance">Governance</Link> 与 <Link href="/project/contributing">Contributing</Link>。
+
+### 渐进增强与按需使用
+
+通过分类模块、单方法文件和多种构建格式，Lodash 支持从“全量引入”到“单方法引入”的渐进使用方式，既能满足快速原型开发，也能满足生产环境对包体积和性能的严格要求。
+
+## 快速上手
+
+如果你还没有安装 Lodash，可以先阅读 <Link href="/installation">Installation</Link> 与 <Link href="/quickstart">Quickstart</Link>，了解如何在浏览器或 Node.js 项目中引入并使用它。
+
+你也可以直接回到 <Link href="/index">首页</Link> 查看整体概览。
