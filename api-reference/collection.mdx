@@ -1,0 +1,1011 @@
+---
+title: Collection Methods
+icon: 📦
+---
+
+<Heading level="1">
+    Collection Methods
+</Heading>
+
+<Paragraph>
+    Lodash 的 Collection 方法同时支持数组和对象作为处理对象，提供了一系列通用的遍历、筛选、转换、聚合等能力，适用于大部分需要批量处理集合数据的场景。本文档将详细介绍 <Mark bold>countBy</Mark>、<Mark bold>forEach</Mark>、<Mark bold>filter</Mark>、<Mark bold>find</Mark>、<Mark bold>flatMap</Mark>、<Mark bold>groupBy</Mark>、<Mark bold>includes</Mark>、<Mark bold>map</Mark>、<Mark bold>orderBy</Mark>、<Mark bold>partition</Mark>、<Mark bold>reduce</Mark>、<Mark bold>reject</Mark>、<Mark bold>sample</Mark>、<Mark bold>shuffle</Mark>、<Mark bold>size</Mark>、<Mark bold>some</Mark>、<Mark bold>sortBy</Mark> 等核心集合方法的使用方式、参数说明与示例。
+</Paragraph>
+
+<Heading level="2">
+    countBy
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.countBy(collection, [iteratee=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    创建一个对象，对象的键是通过对 <Mark bold>collection</Mark> 中的每个元素执行 <Mark bold>iteratee</Mark> 得到的结果，对应的值是该键在迭代中出现的次数。<Mark bold>iteratee</Mark> 会接收单个参数：<Mark bold>(value)</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratee=_.identity]</Mark> *(Function)*: 用来转换键的迭代函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Object)*: 返回组合的聚合对象。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：对数值取整后统计出现次数</Mark>
+</Paragraph>
+
+```js
+_.countBy([6.1, 4.2, 6.3], Math.floor);
+// => { '4': 1, '6': 2 }
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：按字符串长度统计出现次数</Mark>
+</Paragraph>
+
+```js
+// The `_.property` iteratee shorthand.
+_.countBy(['one', 'two', 'three'], 'length');
+// => { '3': 2, '5': 1 }
+```
+
+<Divider />
+
+<Heading level="2">
+    forEach
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.forEach(collection, [iteratee=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    遍历 <Mark bold>collection</Mark> 中的每个元素，并对每个元素调用 <Mark bold>iteratee</Mark>。<Mark bold>iteratee</Mark> 会接收三个参数：<Mark bold>(value, index|key, collection)</Mark>。迭代函数可以通过显式返回 <Mark bold>false</Mark> 提前退出迭代。
+</Paragraph>
+
+<Paragraph>
+    <Mark bold>注意：</Mark> 和其余集合方法一致，带有 <Mark bold>length</Mark> 属性的对象会被当作数组处理。如果需要遍历对象自身属性，请使用 <Mark bold>_.forIn</Mark> 或 <Mark bold>_.forOwn</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    别名
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.each</Mark>
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratee=_.identity]</Mark> *(Function)*: 每次迭代调用的函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(&#42;)*: 返回原集合。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：遍历数组</Mark>
+</Paragraph>
+
+```js
+_.forEach([1, 2], function(value) {
+  console.log(value);
+});
+// => Logs `1` then `2`.
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：遍历对象</Mark>
+</Paragraph>
+
+```js
+_.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
+  console.log(key);
+});
+// => Logs 'a' then 'b' (iteration order is not guaranteed).
+```
+
+<Divider />
+
+<Heading level="2">
+    filter
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.filter(collection, [predicate=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    遍历 <Mark bold>collection</Mark> 中的所有元素，返回所有 <Mark bold>predicate</Mark> 返回真值的元素组成的数组。<Mark bold>predicate</Mark> 会接收三个参数：<Mark bold>(value, index|key, collection)</Mark>。
+</Paragraph>
+
+<Paragraph>
+    <Mark bold>注意：</Mark> 该方法会返回一个新数组，与 <Mark bold>_.remove</Mark> 不同，后者会修改原数组。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[predicate=_.identity]</Mark> *(Function)*: 每次迭代调用的判断函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回过滤后的新数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：过滤活跃用户</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'barney', 'age': 36, 'active': true },
+  { 'user': 'fred',   'age': 40, 'active': false }
+];
+
+_.filter(users, function(o) { return !o.active; });
+// => objects for ['fred']
+
+// The `_.matches` iteratee shorthand.
+_.filter(users, { 'age': 36, 'active': true });
+// => objects for ['barney']
+
+// The `_.matchesProperty` iteratee shorthand.
+_.filter(users, ['active', false]);
+// => objects for ['fred']
+
+// The `_.property` iteratee shorthand.
+_.filter(users, 'active');
+// => objects for ['barney']
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：结合多个判断条件过滤</Mark>
+</Paragraph>
+
+```js
+// Combining several predicates using `_.overSome` or `_.overEvery`.
+_.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
+// => objects for ['fred', 'barney']
+```
+
+<Divider />
+
+<Heading level="2">
+    find
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.find(collection, [predicate=_.identity], [fromIndex=0])</Mark>
+</Paragraph>
+
+<Paragraph>
+    遍历 <Mark bold>collection</Mark> 中的所有元素，返回第一个 <Mark bold>predicate</Mark> 返回真值的元素。<Mark bold>predicate</Mark> 会接收三个参数：<Mark bold>(value, index|key, collection)</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要检查的集合。
+    <Mark bold>[predicate=_.identity]</Mark> *(Function)*: 每次迭代调用的判断函数。
+    <Mark bold>[fromIndex=0]</Mark> *(number)*: 开始搜索的索引位置。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(&#42;)*: 返回匹配到的元素，否则返回 <Mark bold>undefined</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：查找年龄小于40的用户</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'barney',  'age': 36, 'active': true },
+  { 'user': 'fred',    'age': 40, 'active': false },
+  { 'user': 'pebbles', 'age': 1,  'active': true }
+];
+
+_.find(users, function(o) { return o.age < 40; });
+// => object for 'barney'
+
+// The `_.matches` iteratee shorthand.
+_.find(users, { 'age': 1, 'active': true });
+// => object for 'pebbles'
+
+// The `_.matchesProperty` iteratee shorthand.
+_.find(users, ['active', false]);
+// => object for 'fred'
+
+// The `_.property` iteratee shorthand.
+_.find(users, 'active');
+// => object for 'barney'
+```
+
+<Divider />
+
+<Heading level="2">
+    flatMap
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.flatMap(collection, [iteratee=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    对 <Mark bold>collection</Mark> 中的每个元素执行 <Mark bold>iteratee</Mark>，将得到的结果扁平化一层后返回新数组。<Mark bold>iteratee</Mark> 会接收三个参数：<Mark bold>(value, index|key, collection)</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratee=_.identity]</Mark> *(Function)*: 每次迭代调用的函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回新的扁平化数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例：将每个元素重复一次并扁平化</Mark>
+</Paragraph>
+
+```js
+function duplicate(n) {
+  return [n, n];
+}
+
+_.flatMap([1, 2], duplicate);
+// => [1, 1, 2, 2]
+```
+
+<Divider />
+
+<Heading level="2">
+    groupBy
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.groupBy(collection, [iteratee=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    创建一个对象，对象的键是通过对 <Mark bold>collection</Mark> 中的每个元素执行 <Mark bold>iteratee</Mark> 得到的结果，对应的值是生成该键的元素组成的数组。<Mark bold>iteratee</Mark> 会接收单个参数：<Mark bold>(value)</Mark>。分组值的顺序由元素在集合中的出现顺序决定。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratee=_.identity]</Mark> *(Function)*: 用来转换键的迭代函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Object)*: 返回组合的聚合对象。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：按数值取整分组</Mark>
+</Paragraph>
+
+```js
+_.groupBy([6.1, 4.2, 6.3], Math.floor);
+// => { '4': [4.2], '6': [6.1, 6.3] }
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：按字符串长度分组</Mark>
+</Paragraph>
+
+```js
+// The `_.property` iteratee shorthand.
+_.groupBy(['one', 'two', 'three'], 'length');
+// => { '3': ['one', 'two'], '5': ['three'] }
+```
+
+<Divider />
+
+<Heading level="2">
+    includes
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.includes(collection, value, [fromIndex=0])</Mark>
+</Paragraph>
+
+<Paragraph>
+    检查 <Mark bold>value</Mark> 是否在 <Mark bold>collection</Mark> 中。如果 <Mark bold>collection</Mark> 是字符串，则检查 <Mark bold>value</Mark> 是否为其子字符串；否则使用 <Mark bold>SameValueZero</Mark> 进行相等性比较。如果 <Mark bold>fromIndex</Mark> 为负数，则将其作为从集合末尾开始的偏移量。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object|string)*: 要检查的集合。
+    <Mark bold>value</Mark> *(&#42;)*: 要搜索的值。
+    <Mark bold>[fromIndex=0]</Mark> *(number)*: 开始搜索的索引位置。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(boolean)*: 如果找到值则返回 <Mark bold>true</Mark>，否则返回 <Mark bold>false</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：在数组中检查值</Mark>
+</Paragraph>
+
+```js
+_.includes([1, 2, 3], 1);
+// => true
+
+_.includes([1, 2, 3], 1, 2);
+// => false
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：在对象和字符串中检查值</Mark>
+</Paragraph>
+
+```js
+_.includes({ 'a': 1, 'b': 2 }, 1);
+// => true
+
+_.includes('abcd', 'bc');
+// => true
+```
+
+<Divider />
+
+<Heading level="2">
+    map
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.map(collection, [iteratee=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    创建一个数组，包含 <Mark bold>collection</Mark> 中每个元素经过 <Mark bold>iteratee</Mark> 处理的结果。<Mark bold>iteratee</Mark> 会接收三个参数：<Mark bold>(value, index|key, collection)</Mark>。
+</Paragraph>
+
+<Paragraph>
+    许多 Lodash 方法被设计为可以作为 <Mark bold>_.every</Mark>、<Mark bold>_.filter</Mark>、<Mark bold>_.map</Mark>、<Mark bold>_.mapValues</Mark>、<Mark bold>_.reject</Mark>、<Mark bold>_.some</Mark> 的迭代函数使用，这些方法包括：<Mark bold>ary</Mark>、<Mark bold>chunk</Mark>、<Mark bold>curry</Mark>、<Mark bold>curryRight</Mark>、<Mark bold>drop</Mark>、<Mark bold>dropRight</Mark>、<Mark bold>every</Mark>、<Mark bold>fill</Mark>、<Mark bold>invert</Mark>、<Mark bold>parseInt</Mark>、<Mark bold>random</Mark>、<Mark bold>range</Mark>、<Mark bold>rangeRight</Mark>、<Mark bold>repeat</Mark>、<Mark bold>sampleSize</Mark>、<Mark bold>slice</Mark>、<Mark bold>some</Mark>、<Mark bold>sortBy</Mark>、<Mark bold>split</Mark>、<Mark bold>take</Mark>、<Mark bold>takeRight</Mark>、<Mark bold>template</Mark>、<Mark bold>trim</Mark>、<Mark bold>trimEnd</Mark>、<Mark bold>trimStart</Mark>、<Mark bold>words</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratee=_.identity]</Mark> *(Function)*: 每次迭代调用的转换函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回新的映射数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：对数组元素求平方</Mark>
+</Paragraph>
+
+```js
+function square(n) {
+  return n * n;
+}
+
+_.map([4, 8], square);
+// => [16, 64]
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：提取对象数组中的指定属性</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'barney' },
+  { 'user': 'fred' }
+];
+
+// The `_.property` iteratee shorthand.
+_.map(users, 'user');
+// => ['barney', 'fred']
+```
+
+<Divider />
+
+<Heading level="2">
+    orderBy
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.orderBy(collection, [iteratees=[_.identity]], [orders])</Mark>
+</Paragraph>
+
+<Paragraph>
+    该方法类似 <Mark bold>_.sortBy</Mark>，区别在于它允许指定 iteratee 的排序顺序。如果未指定 <Mark bold>orders</Mark>，所有值默认按升序排序；否则可以通过指定 <Mark bold>"desc"</Mark> 表示降序，<Mark bold>"asc"</Mark> 表示升序。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratees=[_.identity]]</Mark> *(Array|Function[]|Object[]|string[])*: 用来排序的迭代函数。
+    <Mark bold>[orders]</Mark> *(string[])*: 每个 iteratee 对应的排序顺序。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回新的排序后的数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例：按用户名字升序、年龄降序排序</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'fred',   'age': 48 },
+  { 'user': 'barney', 'age': 34 },
+  { 'user': 'fred',   'age': 40 },
+  { 'user': 'barney', 'age': 36 }
+];
+
+// Sort by `user` in ascending order and by `age` in descending order.
+_.orderBy(users, ['user', 'age'], ['asc', 'desc']);
+// => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+```
+
+<Divider />
+
+<Heading level="2">
+    partition
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.partition(collection, [predicate=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    将 <Mark bold>collection</Mark> 中的元素拆分为两组，第一组是 <Mark bold>predicate</Mark> 返回真值的元素，第二组是 <Mark bold>predicate</Mark> 返回假值的元素。<Mark bold>predicate</Mark> 会接收单个参数：<Mark bold>(value)</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[predicate=_.identity]</Mark> *(Function)*: 每次迭代调用的判断函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回分组后的数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例：按用户是否活跃分组</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'barney',  'age': 36, 'active': false },
+  { 'user': 'fred',    'age': 40, 'active': true },
+  { 'user': 'pebbles', 'age': 1,  'active': false }
+];
+
+_.partition(users, function(o) { return o.active; });
+// => objects for [['fred'], ['barney', 'pebbles']]
+
+// The `_.matches` iteratee shorthand.
+_.partition(users, { 'age': 1, 'active': false });
+// => objects for [['pebbles'], ['barney', 'fred']]
+
+// The `_.matchesProperty` iteratee shorthand.
+_.partition(users, ['active', false]);
+// => objects for [['barney', 'pebbles'], ['fred']]
+
+// The `_.property` iteratee shorthand.
+_.partition(users, 'active');
+// => objects for [['fred'], ['barney', 'pebbles']]
+```
+
+<Divider />
+
+<Heading level="2">
+    reduce
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.reduce(collection, [iteratee=_.identity], [accumulator])</Mark>
+</Paragraph>
+
+<Paragraph>
+    通过 <Mark bold>iteratee</Mark> 对 <Mark bold>collection</Mark> 中的每个元素执行归约操作，将结果累积为单个值。<Mark bold>iteratee</Mark> 会接收四个参数：<Mark bold>(accumulator, value, index|key, collection)</Mark>。如果未提供 <Mark bold>accumulator</Mark>，则使用集合的第一个元素作为初始值。
+</Paragraph>
+
+<Paragraph>
+    许多 Lodash 方法被设计为可以作为 <Mark bold>_.reduce</Mark>、<Mark bold>_.reduceRight</Mark>、<Mark bold>_.transform</Mark> 的迭代函数使用，这些方法包括：<Mark bold>assign</Mark>、<Mark bold>defaults</Mark>、<Mark bold>defaultsDeep</Mark>、<Mark bold>includes</Mark>、<Mark bold>merge</Mark>、<Mark bold>orderBy</Mark>、<Mark bold>sortBy</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratee=_.identity]</Mark> *(Function)*: 每次迭代调用的归约函数。
+    <Mark bold>[accumulator]</Mark> *(&#42;)*: 初始累积值。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(&#42;)*: 返回累积后的值。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：对数组元素求和</Mark>
+</Paragraph>
+
+```js
+_.reduce([1, 2], function(sum, n) {
+  return sum + n;
+}, 0);
+// => 3
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：对对象进行分组归约</Mark>
+</Paragraph>
+
+```js
+_.reduce({ 'a': 1, 'b': 2, 'c': 1 }, function(result, value, key) {
+  (result[value] || (result[value] = [])).push(key);
+  return result;
+}, {});
+// => { '1': ['a', 'c'], '2': ['b'] } (iteration order is not guaranteed)
+```
+
+<Divider />
+
+<Heading level="2">
+    reject
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.reject(collection, [predicate=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    与 <Mark bold>_.filter</Mark> 相反，该方法返回 <Mark bold>collection</Mark> 中所有 <Mark bold>predicate</Mark> 不返回真值的元素。<Mark bold>predicate</Mark> 会接收三个参数：<Mark bold>(value, index|key, collection)</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[predicate=_.identity]</Mark> *(Function)*: 每次迭代调用的判断函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回过滤后的新数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例：过滤非活跃用户</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'barney', 'age': 36, 'active': false },
+  { 'user': 'fred',   'age': 40, 'active': true }
+];
+
+_.reject(users, function(o) { return !o.active; });
+// => objects for ['fred']
+
+// The `_.matches` iteratee shorthand.
+_.reject(users, { 'age': 40, 'active': true });
+// => objects for ['barney']
+
+// The `_.matchesProperty` iteratee shorthand.
+_.reject(users, ['active', false]);
+// => objects for ['fred']
+
+// The `_.property` iteratee shorthand.
+_.reject(users, 'active');
+// => objects for ['barney']
+```
+
+<Divider />
+
+<Heading level="2">
+    sample
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.sample(collection)</Mark>
+</Paragraph>
+
+<Paragraph>
+    从 <Mark bold>collection</Mark> 中随机获取一个元素。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要采样的集合。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(&#42;)*: 返回随机元素。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例：从数组中随机取一个元素</Mark>
+</Paragraph>
+
+```js
+_.sample([1, 2, 3, 4]);
+// => 2
+```
+
+<Divider />
+
+<Heading level="2">
+    shuffle
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.shuffle(collection)</Mark>
+</Paragraph>
+
+<Paragraph>
+    创建一个数组，其中的元素是 <Mark bold>collection</Mark> 中的值经过随机打乱后的结果，使用 <Mark bold>Fisher-Yates shuffle</Mark> 算法实现。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要打乱的集合。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回新的打乱后的数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例：打乱数组顺序</Mark>
+</Paragraph>
+
+```js
+_.shuffle([1, 2, 3, 4]);
+// => [4, 1, 3, 2]
+```
+
+<Divider />
+
+<Heading level="2">
+    size
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.size(collection)</Mark>
+</Paragraph>
+
+<Paragraph>
+    获取 <Mark bold>collection</Mark> 的大小：对于类数组值返回其 <Mark bold>length</Mark>，对于对象返回其自身可枚举的字符串键属性的数量。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object|string)*: 要检查的集合。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(number)*: 返回集合的大小。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：获取数组和对象的大小</Mark>
+</Paragraph>
+
+```js
+_.size([1, 2, 3]);
+// => 3
+
+_.size({ 'a': 1, 'b': 2 });
+// => 2
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：获取字符串长度</Mark>
+</Paragraph>
+
+```js
+_.size('pebbles');
+// => 7
+```
+
+<Divider />
+
+<Heading level="2">
+    some
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.some(collection, [predicate=_.identity])</Mark>
+</Paragraph>
+
+<Paragraph>
+    检查 <Mark bold>collection</Mark> 中是否有 <Mark bold>predicate</Mark> 返回真值的元素。一旦出现真值就会停止迭代。<Mark bold>predicate</Mark> 会接收三个参数：<Mark bold>(value, index|key, collection)</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[predicate=_.identity]</Mark> *(Function)*: 每次迭代调用的判断函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(boolean)*: 如果有任意元素通过判断则返回 <Mark bold>true</Mark>，否则返回 <Mark bold>false</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例1：检查数组中是否有真值</Mark>
+</Paragraph>
+
+```js
+_.some([null, 0, 'yes', false], Boolean);
+// => true
+```
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例2：检查对象中是否有活跃用户</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'barney', 'active': true },
+  { 'user': 'fred',   'active': false }
+];
+
+// The `_.matches` iteratee shorthand.
+_.some(users, { 'user': 'barney', 'active': false });
+// => false
+
+// The `_.matchesProperty` iteratee shorthand.
+_.some(users, ['active', false]);
+// => true
+
+// The `_.property` iteratee shorthand.
+_.some(users, 'active');
+// => true
+```
+
+<Divider />
+
+<Heading level="2">
+    sortBy
+</Heading>
+
+<Paragraph>
+    <Mark bold>_.sortBy(collection, [iteratees=[_.identity]])</Mark>
+</Paragraph>
+
+<Paragraph>
+    创建一个数组，包含 <Mark bold>collection</Mark> 中的元素，按照每个元素经过 iteratee 处理后的结果升序排序。该方法执行稳定排序，即相等的元素会保持原来的相对顺序。<Mark bold>iteratees</Mark> 会接收单个参数：<Mark bold>(value)</Mark>。
+</Paragraph>
+
+<Heading level="3">
+    参数
+</Heading>
+
+<BulletedList>
+    <Mark bold>collection</Mark> *(Array|Object)*: 要迭代的集合。
+    <Mark bold>[iteratees=[_.identity]]</Mark> *(...(Function|Function[]))*: 用来排序的迭代函数。
+</BulletedList>
+
+<Heading level="3">
+    返回值
+</Heading>
+
+<Paragraph>
+    *(Array)*: 返回新的排序后的数组。
+</Paragraph>
+
+<Heading level="3">
+    示例
+</Heading>
+
+<Paragraph textAlign="left" blockColor="default">
+    <Mark bold>示例：按用户名和年龄排序</Mark>
+</Paragraph>
+
+```js
+var users = [
+  { 'user': 'fred',   'age': 48 },
+  { 'user': 'barney', 'age': 36 },
+  { 'user': 'fred',   'age': 30 },
+  { 'user': 'barney', 'age': 34 }
+];
+
+_.sortBy(users, [function(o) { return o.user; }]);
+// => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 30]]
+
+_.sortBy(users, ['user', 'age']);
+// => objects for [['barney', 34], ['barney', 36], ['fred', 30], ['fred', 48]]
+```
+
+<Divider />
+
+<Heading level="2">
+    其他集合方法
+</Heading>
+
+<Paragraph>
+    除了上述核心方法外，Lodash 还提供了其他集合相关方法，完整列表可以参考 <Link href="/api-reference/collection">Collection 分类下的全部方法</Link>，也可以查看 <Link href="/api-reference/array">Array 方法</Link>、<Link href="/api-reference/object">Object 方法</Link> 了解其他分类的能力。如果需要了解函数式编程相关概念，可以访问 <Link href="/concepts/fp">函数式编程概念</Link> 页面。
+</Paragraph>
