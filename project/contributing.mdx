@@ -1,0 +1,114 @@
+---
+title: Contributing
+icon: 🤝
+---
+
+欢迎为 Lodash 贡献代码！无论是提交 issue、发起 PR 还是参与社区治理，你的贡献都能帮助 Lodash 保持高质量与长期稳定。本文档将详细介绍贡献的完整流程与相关规范。
+
+## 前置准备
+
+在提交任何贡献之前，请先完成以下准备工作：
+
+- 阅读 [Open JS Foundation 行为准则](https://github.com/openjs-foundation/cross-project-council/blob/main/CODE_OF_CONDUCT.md)，确保贡献过程符合社区规范。
+- 先搜索 <Link href="https://github.com/lodash/lodash/issues">issue 追踪器</Link>，确认你要提出的问题或功能需求没有被讨论过，或已经在 `master` 分支中修复。
+- 如果是代码贡献，请先 <Link href="https://help.github.com/articles/fork-a-repo/">fork Lodash 仓库</Link> 到你的个人账号下。
+
+## 提交 Issue
+
+### 功能请求
+
+功能请求需要提交到 <Link href="https://github.com/lodash/lodash/issues">issue 追踪器</Link>，提交时请包含以下内容：
+
+- 期望的行为描述
+- 具体的使用场景说明
+
+功能请求提交后会保持关闭状态，直到社区表现出足够的兴趣，例如获得足够多的 <Mark color="yellow">:+1:</Mark> 反应。你可以查看 <Link href="https://github.com/lodash/lodash/issues?q=label%3A%22votes+needed%22+sort%3Areactions-%2B1-desc">需要投票的 issue 列表</Link> 了解当前社区的需求优先级。
+
+提交前请务必搜索 <Link href="https://github.com/lodash/lodash/issues?q=is%3Aissue+is%3Aclosed+label%3Aenhancement">已关闭的增强类 issue</Link>，避免重复提交类似需求。
+
+### Bug 报告
+
+如果你发现了 Lodash 的 bug，同样在 issue 追踪器中提交，请尽量包含：
+
+- 复现步骤
+- 预期行为与实际行为的差异
+- 相关的环境信息（Lodash 版本、运行环境等）
+
+## 提交 Pull Request
+
+对于功能新增或 bug 修复，你需要通过 PR 提交代码，流程如下：
+
+1. 在你 fork 的仓库中基于最新的 `master` 分支创建新的开发分支。
+2. 大多数情况下你只需要修改 `lodash.js` 文件即可。
+3. 在 `test` 目录下添加或更新对应的单元测试，作为 PR 的一部分。
+4. 不需要重新生成 `dist/` 或 `doc/` 目录下的文件，维护者会在合并后统一处理。
+
+提交 PR 前请参考 <Link href="https://help.github.com/articles/using-pull-requests/">GitHub PR 使用指南</Link>，确保 PR 描述清晰，说明修改的背景、内容与影响范围。
+
+## 编码规范
+
+除了以下明确列出的规范外，请尽量遵循仓库中已有代码的惯例风格。
+
+### 缩进与空格
+
+使用两个空格进行缩进，禁止使用 Tab 字符。
+
+### 命名规范
+
+变量和方法名需要简洁且具备描述性，例如 `index`、`array`、`iteratee` 是更优的选择，避免使用 `i`、`arr`、`fn` 这类过于简略的名称。
+
+### 字符串引号
+
+优先使用单引号字符串，如果字符串内容包含单引号字符，为了避免不必要的转义，可以使用双引号字符串。
+
+### 注释规范
+
+- 重要的新增逻辑请使用单行注释进行标注。
+- 函数请使用 <Link href="http://www.2ality.com/2011/08/jsdoc-intro.html">JSDoc 风格</Link> 注释，说明函数的参数、返回值与功能。
+
+编码规范会通过 [JSCS](https://www.npmjs.com/package/jscs) 工具进行校验，你可以运行以下命令检查代码风格：
+
+```bash
+$ npm run style
+```
+
+## 测试运行
+
+在运行单元测试之前，你需要先安装开发依赖：
+
+```bash
+$ npm i
+```
+
+安装完成后，你可以通过以下两种方式运行测试：
+
+- 命令行方式：执行 `npm test` 即可运行全部单元测试，测试套件包含 Lodash 自身的测试，以及 Backbone 和 Underscore 的兼容测试。
+- 浏览器方式：在浏览器中打开 `test/index.html` 和 `test/fp.html` 即可查看测试结果。
+
+## CLA 签署
+
+Lodash 是 <Link href="https://openjsf.org/">Open JS Foundation</Link> 的成员项目，所有贡献者都需要签署 <Link href="https://openjsf.org/cla">贡献者许可协议（CLA）</Link>。
+
+如果你对 CLA 的作用有疑问，可以参考 Alex Russell 的优质文章 <Link href="https://infrequently.org/2008/06/why-do-i-need-to-sign-this/">《Why Do I Need to Sign This?》</Link>，了解 CLA 对开源项目的意义。
+
+## Git 钩子配置
+
+你可以选择启用 pre-push 的 Git 钩子，在每次推送代码前自动执行校验流程：
+
+1. 在项目根目录创建一个 `.opt-in` 文件，文件内容为：
+   ```txt
+   pre-push
+   ```
+2. 配置完成后，当你执行 `git push` 时，pre-push 钩子会自动触发，执行 `npm run validate` 命令，校验代码风格与测试是否通过。
+
+## 相关链接
+
+你可以参考以下页面了解更多 Lodash 相关的信息：
+
+- <Link href="/index">Lodash 首页</Link>
+- <Link href="/quickstart">快速上手</Link>
+- <Link href="/installation">安装指南</Link>
+- <Link href="/concepts/architecture">架构概览</Link>
+- <Link href="/concepts/fp">FP 模块指南</Link>
+- <Link href="/project/governance">治理规则</Link>
+- 各模块 API 参考：<Link href="/api-reference/array">Array</Link>、<Link href="/api-reference/collection">Collection</Link>、<Link href="/api-reference/object">Object</Link>、<Link href="/api-reference/function">Function</Link>、<Link href="/api-reference/lang">Lang</Link>、<Link href="/api-reference/math">Math</Link>、<Link href="/api-reference/number">Number</Link>、<Link href="/api-reference/string">String</Link>、<Link href="/api-reference/util">Util</Link>
