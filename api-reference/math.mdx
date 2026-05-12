@@ -1,0 +1,265 @@
+---
+title: Math Methods
+icon: ➕
+---
+
+# Math Methods
+
+本节介绍 lodash 中数学相关的工具方法，包括基础算术运算、数值取整、极值与统计计算等常用能力，帮助开发者快速处理数值类操作。
+
+## 基础算术方法
+
+### add
+
+`_.add(augend, addend)` 用于计算两个数字的和。
+
+#### 参数
+1. `augend` *(number)*：加法运算的第一个数字
+2. `addend` *(number)*：加法运算的第二个数字
+
+#### 返回值
+*(number)*：返回相加的总和。
+
+#### 示例
+```js
+_.add(6, 4);
+// => 10
+```
+
+### subtract
+
+`_.subtract(minuend, subtrahend)` 用于计算两个数字的差。
+
+#### 参数
+1. `minuend` *(number)*：减法运算的第一个数字（被减数）
+2. `subtrahend` *(number)*：减法运算的第二个数字（减数）
+
+#### 返回值
+*(number)*：返回计算得到的差。
+
+#### 示例
+```js
+_.subtract(6, 4);
+// => 2
+```
+
+### multiply
+
+`_.multiply(multiplier, multiplicand)` 用于计算两个数字的乘积。
+
+#### 参数
+1. `multiplier` *(number)*：乘法运算的第一个数字（乘数）
+2. `multiplicand` *(number)*：乘法运算的第二个数字（被乘数）
+
+#### 返回值
+*(number)*：返回计算得到的乘积。
+
+#### 示例
+```js
+_.multiply(6, 4);
+// => 24
+```
+
+### divide
+
+`_.divide(dividend, divisor)` 用于计算两个数字的商。
+
+#### 参数
+1. `dividend` *(number)*：除法运算的第一个数字（被除数）
+2. `divisor` *(number)*：除法运算的第二个数字（除数）
+
+#### 返回值
+*(number)*：返回计算得到的商。
+
+#### 示例
+```js
+_.divide(6, 4);
+// => 1.5
+```
+
+## 数值取整方法
+
+### ceil
+
+`_.ceil(number, [precision=0])` 将数字向上取整到指定的精度。
+
+#### 参数
+1. `number` *(number)*：需要向上取整的数字
+2. `[precision=0]` *(number)*：取整的精度（小数位数）
+
+#### 返回值
+*(number)*：返回向上取整后的数字。
+
+#### 示例
+```js
+_.ceil(4.006);
+// => 5
+
+_.ceil(6.004, 2);
+// => 6.01
+
+_.ceil(6040, -2);
+// => 6100
+```
+
+### floor
+
+`_.floor(number, [precision=0])` 将数字向下取整到指定的精度。
+
+#### 参数
+1. `number` *(number)*：需要向下取整的数字
+2. `[precision=0]` *(number)*：取整的精度（小数位数）
+
+#### 返回值
+*(number)*：返回向下取整后的数字。
+
+#### 示例
+```js
+_.floor(4.006);
+// => 4
+
+_.floor(0.046, 2);
+// => 0.04
+
+_.floor(4060, -2);
+// => 4000
+```
+
+### round
+
+`_.round(number, [precision=0])` 将数字按照四舍五入规则取整到指定的精度。
+
+#### 参数
+1. `number` *(number)*：需要四舍五入的数字
+2. `[precision=0]` *(number)*：取整的精度（小数位数）
+
+#### 返回值
+*(number)*：返回四舍五入后的数字。
+
+#### 示例
+```js
+_.round(4.006);
+// => 4
+
+_.round(4.006, 2);
+// => 4.01
+
+_.round(4060, -2);
+// => 4100
+```
+
+## 极值与统计方法
+
+### max
+
+`_.max(array)` 计算数组中的最大值，如果数组为空或空值，则返回 `undefined`。
+
+#### 参数
+1. `array` *(Array)*：待计算的数组
+
+#### 返回值
+*(&#42;)*：返回数组中的最大值。
+
+#### 示例
+```js
+_.max([4, 2, 8, 6]);
+// => 8
+
+_.max([]);
+// => undefined
+```
+
+### min
+
+`_.min(array)` 计算数组中的最小值，如果数组为空或空值，则返回 `undefined`。
+
+#### 参数
+1. `array` *(Array)*：待计算的数组
+
+#### 返回值
+*(&#42;)*：返回数组中的最小值。
+
+#### 示例
+```js
+_.min([4, 2, 8, 6]);
+// => 2
+
+_.min([]);
+// => undefined
+```
+
+### mean
+
+`_.mean(array)` 计算数组中所有数值的平均值。
+
+#### 参数
+1. `array` *(Array)*：待计算的数组
+
+#### 返回值
+*(number)*：返回数组的平均值。
+
+#### 示例
+```js
+_.mean([4, 2, 8, 6]);
+// => 5
+```
+
+### sum
+
+`_.sum(array)` 计算数组中所有数值的总和。
+
+#### 参数
+1. `array` *(Array)*：待计算的数组
+
+#### 返回值
+*(number)*：返回数组的总和。
+
+#### 示例
+```js
+_.sum([4, 2, 8, 6]);
+// => 20
+```
+
+## 扩展方法
+
+除了上述核心方法外，Math 模块还提供了支持自定义迭代器的变体方法，方便开发者处理复杂数据结构的计算：
+
+- `_.maxBy(array, [iteratee=_.identity])`：类似 `_.max`，但可以通过迭代器指定计算最大值的依据
+- `_.minBy(array, [iteratee=_.identity])`：类似 `_.min`，但可以通过迭代器指定计算最小值的依据
+- `_.meanBy(array, [iteratee=_.identity])`：类似 `_.mean`，但可以通过迭代器指定计算平均值的依据
+- `_.sumBy(array, [iteratee=_.identity])`：类似 `_.sum`，但可以通过迭代器指定计算总和的依据
+
+#### maxBy 示例
+```js
+var objects = [{ 'n': 1 }, { 'n': 2 }];
+
+_.maxBy(objects, function(o) { return o.n; });
+// => { 'n': 2 }
+
+// 使用 `_.property` 简写
+_.maxBy(objects, 'n');
+// => { 'n': 2 }
+```
+
+#### sumBy 示例
+```js
+var objects = [{ 'n': 4 }, { 'n': 2 }, { 'n': 8 }, { 'n': 6 }];
+
+_.sumBy(objects, function(o) { return o.n; });
+// => 20
+
+// 使用 `_.property` 简写
+_.sumBy(objects, 'n');
+// => 20
+```
+
+## 相关参考
+
+更多 lodash 方法可参考以下页面：
+
+<Paragraph>
+    <Link href="/api-reference/array">Array 方法参考</Link> |
+    <Link href="/api-reference/number">Number 方法参考</Link> |
+    <Link href="/api-reference/lang">Lang 方法参考</Link> |
+    <Link href="/index">首页</Link>
+</Paragraph>
